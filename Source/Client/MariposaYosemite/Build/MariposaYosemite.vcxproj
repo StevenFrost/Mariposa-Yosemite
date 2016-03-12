@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{DE74DBE6-AF60-4948-B9D6-0412149222A0}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>MariposaYosemite</RootNamespace>
+    <ConfigurationType>Application</ConfigurationType>
+  </PropertyGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(SolutionDir)..\Root.props" />
+    <Import Project="$(ConfigDirectory)Configurations.props" />
+    <Import Project="$(ConfigDirectory)Cpp.props" />
+    <Import Condition="'$(FrameworkImported)'==''" Project="$(CommonDirectory)Framework\Build\Framework.vcxproj.projimport" />
+    <Import Condition="'$(UtilsImported)'==''" Project="$(CommonDirectory)Utils\Build\Utils.vcxproj.projimport" />
+  </ImportGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>MariposaYosemitePch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <SubSystem>console</SubSystem>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Source\Application.cpp" />
+    <ClCompile Include="..\Source\MariposaYosemitePch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Source\MariposaYosemitePch.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

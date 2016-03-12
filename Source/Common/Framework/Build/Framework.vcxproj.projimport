@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup>
+    <Import Condition="'$(FrameworkImported)' == 'true'" Project="Error attempting to import Framework, imported twice." />
+  </ImportGroup>
+  <PropertyGroup Condition="'$(ProjectName)' != 'Framework'">
+    <FrameworkImported>true</FrameworkImported>
+  </PropertyGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Condition="'$(UtilsImported)'==''" Project="$(CommonDirectory)Utils\Build\Utils.vcxproj.projimport" />
+  </ImportGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>
+        $(CommonDirectory)Framework\Inc;
+        %(AdditionalIncludeDirectories)
+      </AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup Condition="'$(ProjectName)' != 'Framework'">
+    <ProjectReference Include="$(CommonDirectory)Framework\Build\Framework.vcxproj">
+      <Project>{E8C6EF3C-E214-4B65-97C5-673C1B723BC1}</Project>
+      <Name>Common/Framework</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+      <UseLibraryDependencyImports>false</UseLibraryDependencyImports>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemDefinitionGroup Condition="'$(ProjectName)' != 'Framework'">
+    <Link>
+      <AdditionalDependencies>
+        $(LibPath)Framework\Framework$(Suffix).lib;
+        %(AdditionalDependencies)
+      </AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+</Project>
