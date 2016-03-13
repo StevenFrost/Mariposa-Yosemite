@@ -7,6 +7,7 @@
     <FrameworkImported>true</FrameworkImported>
   </PropertyGroup>
   <ImportGroup Label="PropertySheets">
+    <Import Condition="'$(FreeGLUTImported)'==''" Project="$(ExternalDirectory)freeglut3.0.0-2\freeglut.vcxproj.projimport" />
     <Import Condition="'$(UtilsImported)'==''" Project="$(CommonDirectory)Utils\Build\Utils.vcxproj.projimport" />
   </ImportGroup>
   <ItemDefinitionGroup>

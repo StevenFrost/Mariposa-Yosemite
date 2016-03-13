@@ -16,9 +16,15 @@
     <ClCompile Include="..\Source\Application.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\AirportScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\MariposaYosemitePch.h">
+      <Filter>Private Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\AirportScene.h">
       <Filter>Private Headers</Filter>
     </ClInclude>
   </ItemGroup>

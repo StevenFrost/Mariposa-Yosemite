@@ -4,26 +4,32 @@
 *                                                           *
 ************************************************************/
 
-#include "MariposaYosemitePch.h"
+#pragma once
 
-#include <memory>
+#include <Framework/Scene.h>
 
-#include <Framework/Context.h>
-
-#include "AirportScene.h"
-
-//-----------------------------------------------------------------------------
-
-int main(int argc, char *argv[])
+namespace Application
 {
-    auto context = std::make_shared<Framework::Context>(argc, argv);
-    auto scene = std::make_shared<Application::AirportScene>();
-
-    context->SetScene(scene);
-    context->Setup(1400, 700, "Mariposa-Yosemite Airport Scene - G53GRA");
-    context->Run();
-
-    return 0;
-}
 
 //-----------------------------------------------------------------------------
+
+class AirportScene : public Framework::Scene
+{
+public:
+    typedef std::shared_ptr<AirportScene> Ptr;
+
+    AirportScene() {}
+    virtual ~AirportScene() {}
+
+    virtual void Initialise();
+
+public: // Callbacks
+    virtual void KeyAction(unsigned char key, bool keyDown, int x, int y);
+
+private:
+
+};
+
+//-----------------------------------------------------------------------------
+
+} // Application

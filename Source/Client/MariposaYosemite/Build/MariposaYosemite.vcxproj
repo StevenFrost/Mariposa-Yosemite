@@ -3,7 +3,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{DE74DBE6-AF60-4948-B9D6-0412149222A0}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>MariposaYosemite</RootNamespace>
+    <RootNamespace>Application</RootNamespace>
     <ConfigurationType>Application</ConfigurationType>
   </PropertyGroup>
   <ImportGroup Label="PropertySheets">
@@ -23,12 +23,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Source\AirportScene.cpp" />
     <ClCompile Include="..\Source\Application.cpp" />
     <ClCompile Include="..\Source\MariposaYosemitePch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Source\AirportScene.h" />
     <ClInclude Include="..\Source\MariposaYosemitePch.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

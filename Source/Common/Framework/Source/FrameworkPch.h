@@ -5,3 +5,9 @@
 ************************************************************/
 
 #pragma once
+
+#include <cstdint>
+#include <ctype.h>
+#include <memory>
+#include <string>
+#include <vector>

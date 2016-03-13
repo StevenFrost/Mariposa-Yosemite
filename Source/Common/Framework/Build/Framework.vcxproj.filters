@@ -16,10 +16,46 @@
     <ClCompile Include="..\Source\FrameworkPch.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Context.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Callback.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\DisplayableObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Scene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\FrameworkPch.h">
       <Filter>Private Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\Framework\Context.h">
+      <Filter>Public Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Callback.h">
+      <Filter>Private Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\Framework\DisplayableObject.h">
+      <Filter>Public Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\Framework\Animation.h">
+      <Filter>Public Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\Framework\Scene.h">
+      <Filter>Public Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\Framework\Camera.h">
+      <Filter>Public Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\Framework\VectorMath.h">
+      <Filter>Public Headers</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
