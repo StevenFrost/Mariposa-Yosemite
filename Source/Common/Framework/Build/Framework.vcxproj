@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{E8C6EF3C-E214-4B65-97C5-673C1B723BC1}</ProjectGuid>
+    <RootNamespace>Framework</RootNamespace>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+  </PropertyGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(SolutionDir)..\Root.props" />
+    <Import Project="$(ConfigDirectory)Configurations.props" />
+    <Import Project="$(ConfigDirectory)Cpp.props" />
+    <Import Project="$(CommonDirectory)Framework\Build\Framework.vcxproj.projimport" />
+  </ImportGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>FrameworkPch.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Source\Callback.cpp" />
+    <ClCompile Include="..\Source\Camera.cpp" />
+    <ClCompile Include="..\Source\Context.cpp" />
+    <ClCompile Include="..\Source\DisplayableObject.cpp" />
+    <ClCompile Include="..\Source\FrameworkPch.cpp">
+      <PrecompiledHeader>Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\Source\Light.cpp" />
+    <ClCompile Include="..\Source\Scene.cpp" />
+    <ClCompile Include="..\Source\TextureManager.cpp" />
+    <ClCompile Include="..\Source\WavefrontObject.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Inc\Framework\Animation.h" />
+    <ClInclude Include="..\Inc\Framework\Camera.h" />
+    <ClInclude Include="..\Inc\Framework\Context.h" />
+    <ClInclude Include="..\Inc\Framework\DisplayableObject.h" />
+    <ClInclude Include="..\Inc\Framework\Light.h" />
+    <ClInclude Include="..\Inc\Framework\Scene.h" />
+    <ClInclude Include="..\Inc\Framework\TextureManager.h" />
+    <ClInclude Include="..\Inc\Framework\Vector.h" />
+    <ClInclude Include="..\Inc\Framework\WavefrontObject.h" />
+    <ClInclude Include="..\Source\Callback.h" />
+    <ClInclude Include="..\Source\FrameworkPch.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+</Project>

@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{36385c64-9025-4716-ba7c-b269d5a71fea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{4d3ec827-b423-4a37-95a5-fae28d848066}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="State">
+      <UniqueIdentifier>{222f9344-63ec-4927-a685-f712ba58f432}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Source\Terrain.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\AirportScene.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Environment.cpp">
+      <Filter>State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Application.cpp" />
+    <ClCompile Include="..\Source\MariposaYosemitePch.cpp" />
+    <ClCompile Include="..\Source\Airport.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GroundPolygon.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Source\Terrain.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\AirportScene.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Environment.h">
+      <Filter>State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\PerformanceCounter.h">
+      <Filter>State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Application.h" />
+    <ClInclude Include="..\Source\MariposaYosemitePch.h" />
+    <ClInclude Include="..\Source\Airport.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GroundPolygon.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

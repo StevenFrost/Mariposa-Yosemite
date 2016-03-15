@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup>
+    <Import Condition="'$(FreeGLUTImported)' == 'true'" Project="Error attempting to import FreeGLUT, imported twice." />
+  </ImportGroup>
+  <PropertyGroup Condition="'$(ProjectName)' != 'FreeGLUT'">
+    <FreeGLUTImported>true</FreeGLUTImported>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>
+        $(ExternalDirectory)freeglut3.0.0-2\include;
+        %(AdditionalIncludeDirectories)
+      </AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(ProjectName)' != 'FreeGLUT'">
+    <Link>
+      <AdditionalDependencies>
+        $(ExternalDirectory)freeglut3.0.0-2\lib\$(Platform)\freeglut.lib;
+        %(AdditionalDependencies)
+      </AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+</Project>
