@@ -15,70 +15,56 @@ namespace Framework
 
 DisplayableObject::DisplayableObject()
 {
-    m_position[0] = 0.0f;
-    m_position[1] = 0.0f;
-    m_position[2] = 0.0f;
-
-    m_scale[0] = 1.0f;
-    m_scale[1] = 1.0f;
-    m_scale[2] = 1.0f;
-
-    m_rotation[0] = 0.0f;
-    m_rotation[1] = 0.0f;
-    m_rotation[2] = 0.0f;
+    m_position = vec3(0.0f, 0.0f, 0.0f);
+    m_scale    = vec3(1.0f, 1.0f, 1.0f);
+    m_rotation = vec3(0.0f, 0.0f, 0.0f);
 }
 
 //-----------------------------------------------------------------------------
 
-void DisplayableObject::SetPosition(float x, float y, float z)
+void DisplayableObject::SetPosition(vec3 const& position)
 {
-    m_position[0] = x;
-    m_position[1] = y;
-    m_position[2] = z;
+    m_position = position;
 }
 
 //-----------------------------------------------------------------------------
 
 void DisplayableObject::SetScale(float s)
 {
-    SetScale(s, s, s);
+    SetScale(vec3(s, s, s));
 }
 
 //-----------------------------------------------------------------------------
 
-void DisplayableObject::SetScale(float x, float y, float z)
+void DisplayableObject::SetScale(vec3 const& scale)
 {
-    m_scale[0] = x;
-    m_scale[1] = y;
-    m_scale[2] = z;
+    m_scale = scale;
 }
 
 //-----------------------------------------------------------------------------
 
-void DisplayableObject::SetRotation(float x, float y, float z)
+void DisplayableObject::SetRotation(vec3 const& rotation)
 {
-    m_rotation[0] = x;
-    m_rotation[1] = y;
-    m_rotation[2] = z;
+    m_rotation = rotation;
 }
 
 //-----------------------------------------------------------------------------
 
-float *DisplayableObject::GetPosition()
+vec3 DisplayableObject::GetPosition()
 {
     return m_position;
 }
 
 //-----------------------------------------------------------------------------
 
-float *DisplayableObject::GetScale()
+vec3 DisplayableObject::GetScale()
 {
     return m_scale;
 }
 
 //-----------------------------------------------------------------------------
 
-float *DisplayableObject::GetRotation()
+vec3 DisplayableObject::GetRotation()
 {
     return m_rotation;
 }

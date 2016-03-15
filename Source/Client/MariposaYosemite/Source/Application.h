@@ -6,40 +6,36 @@
 
 #pragma once
 
-#include <vector>
+#include <memory>
 
-#include <Framework/Scene.h>
+#include <Framework/Context.h>
 
 #include "Environment.h"
-#include "GroundPolygon.h"
+#include "PerformanceCounter.h"
 
 namespace Application
 {
 
 //-----------------------------------------------------------------------------
 
-class AirportScene : public Framework::Scene
+class Application : public Framework::Context
 {
 public:
-    typedef std::shared_ptr<AirportScene> Ptr;
+    typedef std::shared_ptr<Application> Ptr;
 
-    AirportScene(Environment::Ptr const& environment) :
-        m_environment(environment)
-    {}
-    virtual ~AirportScene() {}
+    Application(int argc, char *argv[]);
+    virtual ~Application() {}
 
-    virtual void Initialise();
+    virtual void Idle();
     virtual void Draw();
 
-public: // Callbacks
-    virtual void KeyAction(unsigned char key, bool keyDown, int x, int y);
+    Environment::Ptr GetEnvironment() const { return m_environment; }
 
 private:
-    Environment::Ptr m_environment;
-
-    std::vector<GroundPolygon::Ptr> m_groundPolygons;
+    Environment::Ptr        m_environment;
+    PerformanceCounter::Ptr m_perfCounter;
 };
 
 //-----------------------------------------------------------------------------
 
-} // Application
+} // namespace Application

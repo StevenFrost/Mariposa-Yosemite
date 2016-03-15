@@ -9,6 +9,7 @@
 #include <cstdint>
 #include <memory>
 
+#include <Framework/Vector.h>
 #include <GL/freeglut.h>
 
 namespace Framework
@@ -29,11 +30,11 @@ public:
 
     virtual void Update(uint32_t frameTimeDelta);
 
-    void GetEyePosition(float &x, float &y, float &z) const;
-    void GetViewDirection(float &x, float &y, float &z) const;
-    void GetForwardVector(float &x, float &y, float &z) const;
-    void GetRightVector(float &x, float &y, float &z) const;
-    void GetUpVector(float &x, float &y, float &z) const;
+    vec3 GetEyePosition() const;
+    vec3 GetViewDirection() const;
+    vec3 GetForwardVector() const;
+    vec3 GetRightVector() const;
+    vec3 GetUpVector() const;
 
 public: // Callbacks
     virtual void KeyAction(unsigned char key, bool keyDown, int x, int y);
@@ -44,14 +45,15 @@ public: // Callbacks
     virtual void PassiveMouseMotion(int x, int y);
 
 protected:
-    float m_eyePosition[3];
-    float m_viewDirection[3];
-    float m_forward[3];
-    float m_right[3];
-    float m_up[3];
+    vec3 m_eyePosition;
+    vec3 m_viewDirection;
+    vec3 m_forward;
+    vec3 m_right;
+    vec3 m_up;
 
     bool m_keys[256] = { false };
     bool m_mouseDown;
+    bool m_shiftDown;
 
     GLint m_mouseX;
     GLint m_mouseY;

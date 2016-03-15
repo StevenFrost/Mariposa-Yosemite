@@ -52,6 +52,7 @@ protected:
     int32_t     m_height;
     std::string m_caption;
 
+    int32_t m_currentFrameTime;
     int32_t m_previousFrameTime;
 
     Scene::Ptr m_scene;

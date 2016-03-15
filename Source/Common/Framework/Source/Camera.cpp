@@ -10,8 +10,6 @@
 
 #include <ctype.h>
 
-#include <Framework/VectorMath.h>
-
 namespace Framework
 {
 
@@ -19,6 +17,7 @@ namespace Framework
 
 Camera::Camera() :
     m_mouseDown(false),
+    m_shiftDown(false),
     m_mouseX(0),
     m_mouseY(0)
 {
@@ -29,25 +28,11 @@ Camera::Camera() :
 
 void Camera::Reset()
 {
-    m_eyePosition[0] = 0.0f;
-    m_eyePosition[1] = 2.0f;
-    m_eyePosition[2] = 0.0f;
-
-    m_viewDirection[0] = 0.0f;
-    m_viewDirection[1] = 0.0f;
-    m_viewDirection[2] = 1.0f;
-
-    m_forward[0] = 0.0f;
-    m_forward[1] = 0.0f;
-    m_forward[2] = -1.0f;
-
-    m_right[0] = 1.0f;
-    m_right[1] = 0.0f;
-    m_right[2] = 0.0f;
-
-    m_up[0] = 0.0f;
-    m_up[1] = 1.0f;
-    m_up[2] = 0.0f;
+    m_eyePosition   = vec3(0.0f, 2.0f, 0.0f);
+    m_viewDirection = vec3(0.0f, 0.0f, 1.0f);
+    m_forward       = vec3(0.0f, 0.0f, -1.0f);
+    m_right         = vec3(1.0f, 0.0f, 0.0f);
+    m_up            = vec3(0.0f, 1.0f, 0.0f);
 }
 
 //-----------------------------------------------------------------------------
@@ -58,9 +43,9 @@ void Camera::Look()
     glLoadIdentity();
 
     gluLookAt(
-        m_eyePosition[0], m_eyePosition[1], m_eyePosition[2],
-        m_eyePosition[0] + m_viewDirection[0], m_eyePosition[1] + m_viewDirection[1], m_eyePosition[2] + m_viewDirection[2],
-        m_up[0], m_up[1], m_up[2]
+        m_eyePosition.x, m_eyePosition.y, m_eyePosition.z,
+        m_eyePosition.x + m_viewDirection.x, m_eyePosition.y + m_viewDirection.y, m_eyePosition.z + m_viewDirection.z,
+        m_up.x, m_up.y, m_up.z
     );
 }
 
@@ -68,71 +53,61 @@ void Camera::Look()
 
 void Camera::Update(uint32_t frameTimeDelta)
 {
-    float speed = 0.01f;
+    float speed = 0.1f * (m_shiftDown ? 10.0f : 1.0f);
     float delta = speed * frameTimeDelta;
 
     if (m_keys['a'])
     {
-        sub(m_eyePosition, m_right, delta);
+        m_eyePosition = m_eyePosition - (m_right * delta);
     }
     if (m_keys['d'])
     {
-        add(m_eyePosition, m_right, delta);
+        m_eyePosition = m_eyePosition + (m_right * delta);
     }
     if (m_keys['w'])
     {
-        add(m_eyePosition, m_forward, delta);
+        m_eyePosition = m_eyePosition + (m_forward * delta);
     }
     if (m_keys['s'])
     {
-        sub(m_eyePosition, m_forward, delta);
+        m_eyePosition = m_eyePosition - (m_forward * delta);
     }
     Look();
 }
 
 //-----------------------------------------------------------------------------
 
-void Camera::GetEyePosition(float &x, float &y, float &z) const
+vec3 Camera::GetEyePosition() const
 {
-    x = m_eyePosition[0];
-    y = m_eyePosition[1];
-    z = m_eyePosition[2];
+    return m_eyePosition;
 }
 
 //-----------------------------------------------------------------------------
 
-void Camera::GetViewDirection(float &x, float &y, float &z) const
+vec3 Camera::GetViewDirection() const
 {
-    x = m_viewDirection[0];
-    y = m_viewDirection[1];
-    z = m_viewDirection[2];
+    return m_viewDirection;
 }
 
 //-----------------------------------------------------------------------------
 
-void Camera::GetForwardVector(float &x, float &y, float &z) const
+vec3 Camera::GetForwardVector() const
 {
-    x = m_forward[0];
-    y = m_forward[1];
-    z = m_forward[2];
+    return m_forward;
 }
 
 //-----------------------------------------------------------------------------
 
-void Camera::GetRightVector(float &x, float &y, float &z) const
+vec3 Camera::GetRightVector() const
 {
-    x = m_right[0];
-    y = m_right[1];
-    z = m_right[2];
+    return m_right;
 }
 
 //-----------------------------------------------------------------------------
 
-void Camera::GetUpVector(float &x, float &y, float &z) const
+vec3 Camera::GetUpVector() const
 {
-    x = m_up[0];
-    y = m_up[1];
-    z = m_up[2];
+    return m_up;
 }
 
 //-----------------------------------------------------------------------------
@@ -154,7 +129,14 @@ void Camera::KeyAction(unsigned char key, bool keyDown, int x, int y)
 //-----------------------------------------------------------------------------
 
 void Camera::SpecialKeyAction(int key, bool keyDown, int x, int y)
-{}
+{
+    switch (key)
+    {
+    case GLUT_KEY_SHIFT_L:
+        m_shiftDown = keyDown;
+        break;
+    }
+}
 
 //-----------------------------------------------------------------------------
 
@@ -169,7 +151,7 @@ void Camera::MouseAction(int button, bool mouseDown, int x, int y)
 
 void Camera::MouseMotion(int x, int y)
 {
-    float sensitivity = 0.01f;
+    float sensitivity = 0.005f;
     float dx = static_cast<float>(x - m_mouseX);
     float dy = static_cast<float>(y - m_mouseY);
 
@@ -177,29 +159,28 @@ void Camera::MouseMotion(int x, int y)
     {
         if (dx > 0)
         {
-            add(m_viewDirection, m_right, dx * sensitivity);
+            m_viewDirection = m_viewDirection + (m_right * (dx * sensitivity));
         }
         else
         {
-            sub(m_viewDirection, m_right, dx * -sensitivity);
+            m_viewDirection = m_viewDirection - (m_right * (dx * -sensitivity));
         }
 
         if (dy > 0)
         {
-            sub(m_viewDirection, m_up, dy * sensitivity);
+            m_viewDirection = m_viewDirection - (m_up * (dy * sensitivity));
         }
         else
         {
-            add(m_viewDirection, m_up, dy * -sensitivity);
+            m_viewDirection = m_viewDirection + (m_up * (dy * -sensitivity));
         }
 
-        norm(m_viewDirection);
-        cross(m_viewDirection, m_up, m_right);
-        norm(m_right);
+        m_viewDirection.Normalize();
+        m_right = m_viewDirection.Cross(m_up);
+        m_right.Normalize();
 
-        m_forward[0] = m_viewDirection[0];
-        m_forward[2] = m_viewDirection[2];
-        norm(m_forward);
+        m_forward = m_viewDirection;
+        m_forward.Normalize();
     }
 
     m_mouseX = x;
@@ -208,8 +189,7 @@ void Camera::MouseMotion(int x, int y)
 
 //-----------------------------------------------------------------------------
 
-void Camera::PassiveMouseMotion(int x, int y)
-{}
+void Camera::PassiveMouseMotion(int x, int y) {}
 
 //-----------------------------------------------------------------------------
 

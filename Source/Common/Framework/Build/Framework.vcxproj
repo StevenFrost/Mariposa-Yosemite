@@ -25,15 +25,21 @@
     <ClCompile Include="..\Source\FrameworkPch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\Source\Light.cpp" />
     <ClCompile Include="..\Source\Scene.cpp" />
+    <ClCompile Include="..\Source\TextureManager.cpp" />
+    <ClCompile Include="..\Source\WavefrontObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Inc\Framework\Animation.h" />
     <ClInclude Include="..\Inc\Framework\Camera.h" />
     <ClInclude Include="..\Inc\Framework\Context.h" />
     <ClInclude Include="..\Inc\Framework\DisplayableObject.h" />
+    <ClInclude Include="..\Inc\Framework\Light.h" />
     <ClInclude Include="..\Inc\Framework\Scene.h" />
-    <ClInclude Include="..\Inc\Framework\VectorMath.h" />
+    <ClInclude Include="..\Inc\Framework\TextureManager.h" />
+    <ClInclude Include="..\Inc\Framework\Vector.h" />
+    <ClInclude Include="..\Inc\Framework\WavefrontObject.h" />
     <ClInclude Include="..\Source\Callback.h" />
     <ClInclude Include="..\Source\FrameworkPch.h" />
   </ItemGroup>

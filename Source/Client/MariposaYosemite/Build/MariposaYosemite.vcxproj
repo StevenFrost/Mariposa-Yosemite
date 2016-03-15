@@ -23,15 +23,25 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\Source\Airport.cpp" />
     <ClCompile Include="..\Source\AirportScene.cpp" />
     <ClCompile Include="..\Source\Application.cpp" />
+    <ClCompile Include="..\Source\Environment.cpp" />
+    <ClCompile Include="..\Source\GroundPolygon.cpp" />
     <ClCompile Include="..\Source\MariposaYosemitePch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\Source\Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\Source\Airport.h" />
     <ClInclude Include="..\Source\AirportScene.h" />
+    <ClInclude Include="..\Source\Application.h" />
+    <ClInclude Include="..\Source\Environment.h" />
+    <ClInclude Include="..\Source\GroundPolygon.h" />
     <ClInclude Include="..\Source\MariposaYosemitePch.h" />
+    <ClInclude Include="..\Source\PerformanceCounter.h" />
+    <ClInclude Include="..\Source\Terrain.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

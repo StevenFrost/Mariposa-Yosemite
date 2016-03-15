@@ -1,31 +1,55 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{36385c64-9025-4716-ba7c-b269d5a71fea}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Private Headers">
-      <UniqueIdentifier>{376bfbf4-6f54-41cb-96d3-6cbf4724ea9f}</UniqueIdentifier>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{4d3ec827-b423-4a37-95a5-fae28d848066}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="State">
+      <UniqueIdentifier>{222f9344-63ec-4927-a685-f712ba58f432}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Source\MariposaYosemitePch.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\Source\Application.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="..\Source\Terrain.cpp">
+      <Filter>Objects</Filter>
     </ClCompile>
     <ClCompile Include="..\Source\AirportScene.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Environment.cpp">
+      <Filter>State</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Application.cpp" />
+    <ClCompile Include="..\Source\MariposaYosemitePch.cpp" />
+    <ClCompile Include="..\Source\Airport.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\GroundPolygon.cpp">
+      <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Source\MariposaYosemitePch.h">
-      <Filter>Private Headers</Filter>
+    <ClInclude Include="..\Source\Terrain.h">
+      <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\AirportScene.h">
-      <Filter>Private Headers</Filter>
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Environment.h">
+      <Filter>State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\PerformanceCounter.h">
+      <Filter>State</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Application.h" />
+    <ClInclude Include="..\Source\MariposaYosemitePch.h" />
+    <ClInclude Include="..\Source\Airport.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\GroundPolygon.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

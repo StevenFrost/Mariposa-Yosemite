@@ -31,11 +31,11 @@ Context::Context(int argc, char *argv[]) :
 
 void Context::Idle()
 {
-    uint32_t frameTime = glutGet(GLUT_ELAPSED_TIME);
+    m_currentFrameTime = glutGet(GLUT_ELAPSED_TIME);
     uint32_t previousFrameTime = m_previousFrameTime;
-    m_previousFrameTime = frameTime;
+    m_previousFrameTime = m_currentFrameTime;
 
-    m_scene->Update(frameTime - previousFrameTime);
+    m_scene->Update(m_currentFrameTime - previousFrameTime);
 
     glutPostRedisplay();
 }
@@ -61,6 +61,9 @@ void Context::Reshape(int32_t width, int32_t height)
     glLoadIdentity();
 
     gluPerspective(60.0, static_cast<GLdouble>(m_width) / static_cast<GLdouble>(m_height), 1.0, 10000.0);
+#ifdef ENABLE_ORTHOGRAPHIC_PROJECTION
+    glOrtho(-m_width / 8.0, m_width / 8.0, -m_height / 8.0, m_height / 8.0, 1.0, 10000.0);
+#endif // ENABLE_ORTHOGRAPHIC_PROJECTION
 
     glMatrixMode(GL_MODELVIEW);
 
@@ -75,7 +78,7 @@ void Context::Setup(int32_t width, int32_t height, std::string const& caption)
     m_height = height;
     m_caption = caption;
 
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE);
     glutInitWindowSize(m_width, m_height);
     m_windowHandle = glutCreateWindow(m_caption.c_str());
 
@@ -117,15 +120,15 @@ void Context::Run()
 
     glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
 
-    GLfloat global_ambient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+    GLfloat global_ambient[] = { 0.3f, 0.3f, 0.3f, 1.0f };
     glLightModelfv(GL_LIGHT_MODEL_AMBIENT, global_ambient);
 
     glEnable(GL_LIGHTING);
     GLfloat ambience[] = { 0.2f, 0.2f, 0.2f, 1.0f };
     GLfloat diffuse[]  = { 0.8f, 0.8f, 0.8f, 1.0f };
     GLfloat specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-    GLfloat position[] = { 1.0f, 1.0f, 1.0f, 0.0f };
-
+    GLfloat position[] = { 1.0f, 1.0f, 1.0f, 1.0f };
+    
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambience);
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, specular);
@@ -134,6 +137,18 @@ void Context::Run()
 
     glShadeModel(GL_SMOOTH);
     glEnable(GL_NORMALIZE);
+
+#ifdef ENABLE_FOG
+    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+    GLfloat fogColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
+    GLfloat density = 0.001f;
+    glEnable(GL_FOG);
+
+    glFogi(GL_FOG_MODE, GL_EXP2);
+    glFogfv(GL_FOG_COLOR, fogColor);
+    glFogf(GL_FOG_DENSITY, density);
+    glHint(GL_FOG_HINT, GL_NICEST);
+#endif // ENABLE_FOG
 
     m_scene->Initialise();
     glutMainLoop();

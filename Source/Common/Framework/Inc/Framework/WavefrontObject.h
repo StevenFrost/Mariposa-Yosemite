@@ -7,37 +7,32 @@
 #pragma once
 
 #include <memory>
+#include <string>
+#include <vector>
 
-#include <Framework/Vector.h>
+#include <Framework/DisplayableObject.h>
+#include <Framework/TextureManager.h>
 
 namespace Framework
 {
 
 //-----------------------------------------------------------------------------
 
-class DisplayableObject
+class WavefrontObject : public DisplayableObject
 {
 public:
-    typedef std::shared_ptr<DisplayableObject> Ptr;
+    WavefrontObject(std::string const& objFile, TextureManager::Ptr const& textureManager);
 
-    DisplayableObject();
-    virtual ~DisplayableObject() {}
+    virtual void Draw();
 
-    virtual void Draw() = 0;
+private:
+    void ReadOBJ();
 
-    void SetPosition(vec3 const& position);
-    void SetScale(float s);
-    void SetScale(vec3 const& scale);
-    void SetRotation(vec3 const& rotation);
+private:
+    TextureManager::Ptr m_textureManager;
 
-    vec3 GetPosition();
-    vec3 GetScale();
-    vec3 GetRotation();
-
-protected:
-    vec3 m_position;
-    vec3 m_scale;
-    vec3 m_rotation;
+    std::string        m_file;
+    std::vector<float> m_data; // { vec3 position, vec3 normal, vec2 texCoord }
 };
 
 //-----------------------------------------------------------------------------

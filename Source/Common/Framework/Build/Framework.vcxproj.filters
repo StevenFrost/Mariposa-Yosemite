@@ -31,6 +31,15 @@
     <ClCompile Include="..\Source\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\TextureManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\WavefrontObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\FrameworkPch.h">
@@ -54,7 +63,16 @@
     <ClInclude Include="..\Inc\Framework\Camera.h">
       <Filter>Public Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Inc\Framework\VectorMath.h">
+    <ClInclude Include="..\Inc\Framework\TextureManager.h">
+      <Filter>Public Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\Framework\Vector.h">
+      <Filter>Public Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\Framework\Light.h">
+      <Filter>Public Headers</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Inc\Framework\WavefrontObject.h">
       <Filter>Public Headers</Filter>
     </ClInclude>
   </ItemGroup>

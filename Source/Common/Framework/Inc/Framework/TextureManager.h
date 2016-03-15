@@ -6,38 +6,29 @@
 
 #pragma once
 
+#include <map>
 #include <memory>
+#include <string>
 
-#include <Framework/Vector.h>
+#include <GL/freeglut.h>
 
 namespace Framework
 {
 
 //-----------------------------------------------------------------------------
 
-class DisplayableObject
+class TextureManager
 {
 public:
-    typedef std::shared_ptr<DisplayableObject> Ptr;
+    typedef std::shared_ptr<TextureManager> Ptr;
 
-    DisplayableObject();
-    virtual ~DisplayableObject() {}
+    TextureManager() {}
+    virtual ~TextureManager();
 
-    virtual void Draw() = 0;
+    GLuint GetTexture(std::string const& fileName, bool generateMips = true);
 
-    void SetPosition(vec3 const& position);
-    void SetScale(float s);
-    void SetScale(vec3 const& scale);
-    void SetRotation(vec3 const& rotation);
-
-    vec3 GetPosition();
-    vec3 GetScale();
-    vec3 GetRotation();
-
-protected:
-    vec3 m_position;
-    vec3 m_scale;
-    vec3 m_rotation;
+private:
+    std::map<std::string, GLuint> m_textures;
 };
 
 //-----------------------------------------------------------------------------
