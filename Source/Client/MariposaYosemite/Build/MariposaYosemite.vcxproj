@@ -11,7 +11,6 @@
     <Import Project="$(ConfigDirectory)Configurations.props" />
     <Import Project="$(ConfigDirectory)Cpp.props" />
     <Import Condition="'$(FrameworkImported)'==''" Project="$(CommonDirectory)Framework\Build\Framework.vcxproj.projimport" />
-    <Import Condition="'$(UtilsImported)'==''" Project="$(CommonDirectory)Utils\Build\Utils.vcxproj.projimport" />
   </ImportGroup>
   <ItemDefinitionGroup>
     <ClCompile>
