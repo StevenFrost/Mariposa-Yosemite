@@ -18,9 +18,8 @@ namespace Application
 
 //-----------------------------------------------------------------------------
 
-J3Aircraft::J3Aircraft(Framework::Camera::Ptr const& camera) :
+Aircraft::Aircraft() :
     AnimatedWavefrontObject(R"(Resources\piper-j3-cub.obj)", nullptr),
-    m_camera(camera),
     m_actualState(std::make_shared<AircraftState>()),
     m_animationTime(0),
     m_startTime(0),
@@ -52,11 +51,11 @@ J3Aircraft::J3Aircraft(Framework::Camera::Ptr const& camera) :
 
 //-----------------------------------------------------------------------------
 
-J3Aircraft::~J3Aircraft() {}
+Aircraft::~Aircraft() {}
 
 //-----------------------------------------------------------------------------
 
-void J3Aircraft::Draw()
+void Aircraft::Draw()
 {
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glDisable(GL_CULL_FACE);
@@ -82,7 +81,7 @@ void J3Aircraft::Draw()
 
 //-----------------------------------------------------------------------------
 
-void J3Aircraft::Update(uint32_t frameTimeDelta)
+void Aircraft::Update(uint32_t frameTimeDelta)
 {
     m_animationTime += frameTimeDelta;
 
@@ -134,16 +133,11 @@ void J3Aircraft::Update(uint32_t frameTimeDelta)
     }
 
     m_actualState->Orientation.y = next->Orientation.y;
-
-    if (ENABLE_EPIC_MODE)
-    {
-        m_camera->SetEyePosition(vec3((float)m_actualState->Position.x + 0.65f, (float)m_actualState->Position.y + 3.2f, (float)m_actualState->Position.z - 0.85f));
-    }
 }
 
 //-----------------------------------------------------------------------------
 
-void J3Aircraft::NextWaypoint()
+void Aircraft::NextWaypoint()
 {
     auto previous = m_animation.front();
     m_animation.pop_front();

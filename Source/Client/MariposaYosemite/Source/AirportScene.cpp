@@ -16,6 +16,7 @@
 
 #include "Aircraft.h"
 #include "GroundPolygon.h"
+#include "OrbitCamera.h"
 #include "Terrain.h"
 
 namespace Application
@@ -23,65 +24,38 @@ namespace Application
 
 //-----------------------------------------------------------------------------
 
-class TexturedWavefrontObject : public Framework::WavefrontObject
-{
-public:
-    TexturedWavefrontObject(std::string const& file, Framework::TextureManager::Ptr const& textureManager) :
-        WavefrontObject(file, textureManager),
-        m_textureHandle(textureManager->GetTexture(R"(Resources\ortho.bmp)"))
-    {}
 
-    virtual ~TexturedWavefrontObject() {}
 
-    virtual void Draw()
-    {
-        glPushAttrib(GL_ALL_ATTRIB_BITS);
-        glPushMatrix();
+//-----------------------------------------------------------------------------
 
-        glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, m_textureHandle);
-
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glEnableClientState(GL_NORMAL_ARRAY);
-        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-
-        glVertexPointer(3, GL_FLOAT, 8 * sizeof(GLfloat), m_data.data());
-        glTexCoordPointer(2, GL_FLOAT, 8 * sizeof(GLfloat), m_data.data() + 3);
-        glNormalPointer(GL_FLOAT, 8 * sizeof(GLfloat), m_data.data() + 5);
-
-        glDrawArrays(GL_TRIANGLES, 0, GetNumVertices());
-
-        glDisableClientState(GL_VERTEX_ARRAY);
-        glDisableClientState(GL_NORMAL_ARRAY);
-        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-
-        glEnable(GL_DEPTH_TEST);
-        glDisable(GL_TEXTURE_2D);
-
-        glPopMatrix();
-        glPopAttrib();
-    }
-
-private:
-    GLuint m_textureHandle;
-};
+AirportScene::AirportScene(Environment::Ptr const& environment) :
+    m_environment(environment)
+{}
 
 //-----------------------------------------------------------------------------
 
 void AirportScene::Initialise()
 {
-    // Standard objects
-    m_objects.push_back(std::make_shared<Application::Terrain>(m_environment->GetTextureManager()));
-    m_objects.push_back(std::make_shared<TexturedWavefrontObject>(R"(Resources\airport-base.obj)", m_environment->GetTextureManager()));
+    auto terrain = std::make_shared<Application::Terrain>(m_environment->GetTextureManager());
+    auto airportBase = std::make_shared<Framework::TexturedWavefrontObject>(R"(Resources\airport-base.obj)", m_environment->GetTextureManager());
+    auto aircraft = std::make_shared<Aircraft>();
 
-    m_objects.push_back(std::make_shared<J3Aircraft>(m_camera));
+    auto roamingCamera = std::make_shared<Framework::Camera>();
+    auto orbitCamera = std::make_shared<OrbitCamera>(aircraft);
 
-    // Ground polygons/decals
-    m_groundPolygons.push_back(std::make_shared<TexturedWavefrontObject>(R"(Resources\airport-base-flatten.obj)", m_environment->GetTextureManager()));
-    m_groundPolygons.push_back(std::make_shared<GroundPolygon>(
-        R"(Resources\runway.obj)",
-        m_environment->GetTextureManager())
-    );
+    auto airportBaseFlatten = std::make_shared<Framework::TexturedWavefrontObject>(R"(Resources\airport-base-flatten.obj)", m_environment->GetTextureManager());
+    auto runway = std::make_shared<GroundPolygon>(R"(Resources\runway.obj)", m_environment->GetTextureManager());
+
+
+    m_objects.push_back(terrain);
+    m_objects.push_back(airportBase);
+    m_objects.push_back(aircraft);
+
+    m_cameras.insert(std::make_pair(CameraType::Roaming, roamingCamera));
+    m_cameras.insert(std::make_pair(CameraType::Orbit, orbitCamera));
+
+    m_groundPolygons.push_back(airportBaseFlatten);
+    m_groundPolygons.push_back(runway);
 }
 
 //-----------------------------------------------------------------------------
@@ -124,14 +98,11 @@ void AirportScene::KeyAction(unsigned char key, bool keyDown, int x, int y)
     {
         switch (key)
         {
-        case 'P':
-        case 'p':
-            printf("Eye Position: %s\r\n", m_camera->GetEyePosition().ToString().c_str());
+        case '1':
+            m_camera = m_cameras.find(CameraType::Roaming)->second;
             break;
-        case 'O':
-        case 'o':
-            auto cub = std::dynamic_pointer_cast<J3Aircraft>(m_objects.back());
-            cub->ENABLE_EPIC_MODE = !cub->ENABLE_EPIC_MODE;
+        case '2':
+            m_camera = m_cameras.find(CameraType::Orbit)->second;
             break;
         }
     }

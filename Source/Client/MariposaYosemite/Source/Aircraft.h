@@ -71,25 +71,23 @@ struct AircraftState
 
 //-----------------------------------------------------------------------------
 
-class J3Aircraft : public Framework::AnimatedWavefrontObject
+class Aircraft : public Framework::AnimatedWavefrontObject
 {
 public:
-    typedef std::shared_ptr<J3Aircraft> Ptr;
+    typedef std::shared_ptr<Aircraft> Ptr;
 
-    J3Aircraft(Framework::Camera::Ptr const& camera);
-    virtual ~J3Aircraft();
+    Aircraft();
+    virtual ~Aircraft();
 
     virtual void Draw();
     virtual void Update(uint32_t frameTimeDelta);
 
-    bool ENABLE_EPIC_MODE = false;
+    dvec3 GetPosition() const { return m_actualState->Position; }
 
 private:
     void NextWaypoint();
 
 private:
-    Framework::Camera::Ptr m_camera;
-
     uint32_t m_animationTime;
 
     std::deque<AircraftState::Ptr> m_animation;

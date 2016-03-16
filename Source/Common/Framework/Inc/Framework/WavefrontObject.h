@@ -42,4 +42,22 @@ private:
 
 //-----------------------------------------------------------------------------
 
+class TexturedWavefrontObject : public Framework::WavefrontObject
+{
+public:
+    TexturedWavefrontObject(std::string const& file, Framework::TextureManager::Ptr const& textureManager) :
+        WavefrontObject(file, textureManager),
+        m_textureHandle(textureManager->GetTexture(R"(Resources\ortho.bmp)"))
+    {}
+
+    virtual ~TexturedWavefrontObject() {}
+
+    virtual void Draw();
+
+private:
+    GLuint m_textureHandle;
+};
+
+//-----------------------------------------------------------------------------
+
 } // namespace Framework

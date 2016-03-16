@@ -30,6 +30,7 @@
     <ClCompile Include="..\Source\MariposaYosemitePch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="..\Source\OrbitCamera.cpp" />
     <ClCompile Include="..\Source\Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -39,6 +40,7 @@
     <ClInclude Include="..\Source\Environment.h" />
     <ClInclude Include="..\Source\GroundPolygon.h" />
     <ClInclude Include="..\Source\MariposaYosemitePch.h" />
+    <ClInclude Include="..\Source\OrbitCamera.h" />
     <ClInclude Include="..\Source\PerformanceCounter.h" />
     <ClInclude Include="..\Source\Terrain.h" />
   </ItemGroup>

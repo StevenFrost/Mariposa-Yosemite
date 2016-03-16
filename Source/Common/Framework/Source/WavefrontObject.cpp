@@ -182,4 +182,35 @@ void WavefrontObject::ReadOBJ()
 
 //-----------------------------------------------------------------------------
 
+void TexturedWavefrontObject::Draw()
+{
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
+    glPushMatrix();
+
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, m_textureHandle);
+
+    glEnableClientState(GL_VERTEX_ARRAY);
+    glEnableClientState(GL_NORMAL_ARRAY);
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    glVertexPointer(3, GL_FLOAT, 8 * sizeof(GLfloat), m_data.data());
+    glTexCoordPointer(2, GL_FLOAT, 8 * sizeof(GLfloat), m_data.data() + 3);
+    glNormalPointer(GL_FLOAT, 8 * sizeof(GLfloat), m_data.data() + 5);
+
+    glDrawArrays(GL_TRIANGLES, 0, GetNumVertices());
+
+    glDisableClientState(GL_VERTEX_ARRAY);
+    glDisableClientState(GL_NORMAL_ARRAY);
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+    glEnable(GL_DEPTH_TEST);
+    glDisable(GL_TEXTURE_2D);
+
+    glPopMatrix();
+    glPopAttrib();
+}
+
+//-----------------------------------------------------------------------------
+
 } // namespace Framework

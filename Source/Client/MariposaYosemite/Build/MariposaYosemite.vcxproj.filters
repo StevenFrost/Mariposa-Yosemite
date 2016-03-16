@@ -10,6 +10,9 @@
     <Filter Include="State">
       <UniqueIdentifier>{222f9344-63ec-4927-a685-f712ba58f432}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Cameras">
+      <UniqueIdentifier>{e5aef456-ad80-418b-bbe2-b2a386b829c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\Terrain.cpp">
@@ -28,6 +31,9 @@
     </ClCompile>
     <ClCompile Include="..\Source\Aircraft.cpp">
       <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\OrbitCamera.cpp">
+      <Filter>Cameras</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -50,6 +56,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\Aircraft.h">
       <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\OrbitCamera.h">
+      <Filter>Cameras</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
