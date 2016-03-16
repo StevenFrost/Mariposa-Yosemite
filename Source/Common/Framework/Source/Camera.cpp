@@ -53,8 +53,8 @@ void Camera::Look()
 
 void Camera::Update(uint32_t frameTimeDelta)
 {
-    float speed = 0.1f * (m_shiftDown ? 10.0f : 1.0f);
-    float delta = speed * frameTimeDelta;
+    float speed = 60.0f * (m_shiftDown ? 2.0f : 1.0f);
+    float delta = speed * (frameTimeDelta / 1000.0f);
 
     if (m_keys['a'])
     {

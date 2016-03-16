@@ -23,10 +23,10 @@
     </ClCompile>
     <ClCompile Include="..\Source\Application.cpp" />
     <ClCompile Include="..\Source\MariposaYosemitePch.cpp" />
-    <ClCompile Include="..\Source\Airport.cpp">
+    <ClCompile Include="..\Source\GroundPolygon.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
-    <ClCompile Include="..\Source\GroundPolygon.cpp">
+    <ClCompile Include="..\Source\Aircraft.cpp">
       <Filter>Objects</Filter>
     </ClCompile>
   </ItemGroup>
@@ -45,10 +45,10 @@
     </ClInclude>
     <ClInclude Include="..\Source\Application.h" />
     <ClInclude Include="..\Source\MariposaYosemitePch.h" />
-    <ClInclude Include="..\Source\Airport.h">
+    <ClInclude Include="..\Source\GroundPolygon.h">
       <Filter>Objects</Filter>
     </ClInclude>
-    <ClInclude Include="..\Source\GroundPolygon.h">
+    <ClInclude Include="..\Source\Aircraft.h">
       <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>

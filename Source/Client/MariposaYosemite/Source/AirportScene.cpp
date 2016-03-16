@@ -14,6 +14,8 @@
 #include <Framework/WavefrontObject.h>
 #include <GL/freeglut.h>
 
+#include "Aircraft.h"
+#include "GroundPolygon.h"
 #include "Terrain.h"
 
 namespace Application
@@ -21,16 +23,61 @@ namespace Application
 
 //-----------------------------------------------------------------------------
 
+class TexturedWavefrontObject : public Framework::WavefrontObject
+{
+public:
+    TexturedWavefrontObject(std::string const& file, Framework::TextureManager::Ptr const& textureManager) :
+        WavefrontObject(file, textureManager),
+        m_textureHandle(textureManager->GetTexture(R"(Resources\ortho.bmp)"))
+    {}
+
+    virtual ~TexturedWavefrontObject() {}
+
+    virtual void Draw()
+    {
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        glPushMatrix();
+
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture(GL_TEXTURE_2D, m_textureHandle);
+
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glEnableClientState(GL_NORMAL_ARRAY);
+        glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+
+        glVertexPointer(3, GL_FLOAT, 8 * sizeof(GLfloat), m_data.data());
+        glTexCoordPointer(2, GL_FLOAT, 8 * sizeof(GLfloat), m_data.data() + 3);
+        glNormalPointer(GL_FLOAT, 8 * sizeof(GLfloat), m_data.data() + 5);
+
+        glDrawArrays(GL_TRIANGLES, 0, GetNumVertices());
+
+        glDisableClientState(GL_VERTEX_ARRAY);
+        glDisableClientState(GL_NORMAL_ARRAY);
+        glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+        glEnable(GL_DEPTH_TEST);
+        glDisable(GL_TEXTURE_2D);
+
+        glPopMatrix();
+        glPopAttrib();
+    }
+
+private:
+    GLuint m_textureHandle;
+};
+
+//-----------------------------------------------------------------------------
+
 void AirportScene::Initialise()
 {
     // Standard objects
     m_objects.push_back(std::make_shared<Application::Terrain>(m_environment->GetTextureManager()));
-    m_objects.push_back(std::make_shared<Framework::WavefrontObject>(
-        R"(Resources\buildings.obj)",
-        m_environment->GetTextureManager())
-    );
+    m_objects.push_back(std::make_shared<TexturedWavefrontObject>(R"(Resources\airport-base.obj)", m_environment->GetTextureManager()));
+
+    m_objects.push_back(std::make_shared<J3Aircraft>(m_camera));
 
     // Ground polygons/decals
+    m_groundPolygons.push_back(std::make_shared<TexturedWavefrontObject>(R"(Resources\airport-base-flatten.obj)", m_environment->GetTextureManager()));
     m_groundPolygons.push_back(std::make_shared<GroundPolygon>(
         R"(Resources\runway.obj)",
         m_environment->GetTextureManager())
@@ -48,29 +95,23 @@ void AirportScene::Draw()
 
     m_camera->Look();
 
-#ifdef ENABLE_DECAL_DRAW_MODE
     glDepthMask(GL_TRUE);
     glStencilFunc(GL_ALWAYS, 0, 1);
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
-#endif // ENABLE_DECAL_DRAW_MODE
     for (auto& object : m_objects)
     {
         object->Draw();
     }
 
-#ifdef ENABLE_DECAL_DRAW_MODE
     glDepthMask(GL_FALSE);
     glStencilFunc(GL_NOTEQUAL, 1, 1);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
-#endif // ENABLE_DECAL_DRAW_MODE
     for (auto& groundPolygon : m_groundPolygons)
     {
         groundPolygon->Draw();
     }
 
-#ifdef ENABLE_DECAL_DRAW_MODE
     glDepthMask(GL_TRUE);
-#endif // ENABLE_DECAL_DRAW_MODE
 }
 
 //-----------------------------------------------------------------------------
@@ -86,6 +127,11 @@ void AirportScene::KeyAction(unsigned char key, bool keyDown, int x, int y)
         case 'P':
         case 'p':
             printf("Eye Position: %s\r\n", m_camera->GetEyePosition().ToString().c_str());
+            break;
+        case 'O':
+        case 'o':
+            auto cub = std::dynamic_pointer_cast<J3Aircraft>(m_objects.back());
+            cub->ENABLE_EPIC_MODE = !cub->ENABLE_EPIC_MODE;
             break;
         }
     }

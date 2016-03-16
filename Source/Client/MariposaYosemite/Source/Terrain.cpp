@@ -188,41 +188,43 @@ void Terrain::BuildDisplayList()
     {
         for (uint16_t j = 0; j < m_tileWidth - 1; ++j)
         {
+            if (i > 138 && i < 152 && j >= 120 && j < 170) continue;
+
             // Triangle 1
             {
-                vec3 a(j - halfHeight, GetCorrectedHeightAt(i, j) * scale, i - halfWidth);
-                vec3 b(j - halfWidth, GetCorrectedHeightAt(i + 1, j) * scale, (i + 1) - halfHeight);
-                vec3 c((j + 1) - halfWidth, GetCorrectedHeightAt(i, j + 1) * scale, i - halfHeight);
+                vec3 a(j - halfHeight, m_heightMap[i][j] * scale, i - halfWidth);
+                vec3 b(j - halfWidth, m_heightMap[i + 1][j] * scale, (i + 1) - halfHeight);
+                vec3 c((j + 1) - halfWidth, m_heightMap[i][j + 1] * scale, i - halfHeight);
                 
                 vec3 n = CalculateTriangleNormal(a, b, c);
                 glNormal3f(n.x, n.y, n.z);
 
-                glTexCoord2f(i * texCoordCellWidth, j * texCoordCellWidth);
+                glTexCoord2f(j * texCoordCellWidth, 1.0f - (i * texCoordCellWidth));
                 glVertex3f(a.x, a.y, a.z);
 
-                glTexCoord2f((i + 1) * texCoordCellWidth, j * texCoordCellWidth);
+                glTexCoord2f(j * texCoordCellWidth, 1.0f - ((i + 1) * texCoordCellWidth));
                 glVertex3f(b.x, b.y, b.z);
 
-                glTexCoord2f(i * texCoordCellWidth, (j + 1) * texCoordCellWidth);
+                glTexCoord2f((j + 1) * texCoordCellWidth, 1.0f - (i * texCoordCellWidth));
                 glVertex3f(c.x, c.y, c.z);
             }
 
             // Triangle 2
             {
-                vec3 a(j - halfWidth, GetCorrectedHeightAt(i + 1, j) * scale, (i + 1) - halfHeight);
-                vec3 b((j + 1) - halfWidth, GetCorrectedHeightAt(i + 1, j + 1) * scale, (i + 1) - halfHeight);
-                vec3 c((j + 1) - halfWidth, GetCorrectedHeightAt(i, j + 1) * scale, i - halfHeight);
+                vec3 a(j - halfWidth, m_heightMap[i + 1][j] * scale, (i + 1) - halfHeight);
+                vec3 b((j + 1) - halfWidth, m_heightMap[i + 1][j + 1] * scale, (i + 1) - halfHeight);
+                vec3 c((j + 1) - halfWidth, m_heightMap[i][j + 1] * scale, i - halfHeight);
 
                 vec3 n = CalculateTriangleNormal(a, b, c);
                 glNormal3f(n.x, n.y, n.z);
 
-                glTexCoord2f((i + 1) * texCoordCellWidth, j * texCoordCellWidth);
+                glTexCoord2f(j * texCoordCellWidth, 1.0f - ((i + 1) * texCoordCellWidth));
                 glVertex3f(a.x, a.y, a.z);
 
-                glTexCoord2f((i + 1) * texCoordCellWidth, (j + 1) * texCoordCellWidth);
+                glTexCoord2f((j + 1) * texCoordCellWidth, 1.0f - ((i + 1) * texCoordCellWidth));
                 glVertex3f(b.x, b.y, b.z);
 
-                glTexCoord2f(i * texCoordCellWidth, (j + 1) * texCoordCellWidth);
+                glTexCoord2f((j + 1) * texCoordCellWidth, 1.0f - (i * texCoordCellWidth));
                 glVertex3f(c.x, c.y, c.z);
             }
         }
@@ -230,17 +232,50 @@ void Terrain::BuildDisplayList()
     glEnd();
     glPopMatrix();
     glEndList();
-}
 
-//-----------------------------------------------------------------------------
-
-uint16_t Terrain::GetCorrectedHeightAt(uint16_t x, uint16_t y)
-{
-    if (x > 138 && x < 152 && y > 120 && y < 170)
+#ifdef AIRPORT_BASE_EXPORT
+    float tScale = 30.0f;
+    uint32_t count = 0;
+    char buf[256];
+    for (uint16_t i = 139; i < 152; ++i)
     {
-        return 680;
+        for (uint16_t j = 120; j < 170; ++j)
+        {
+            sprintf_s(buf, "v %f %f %f\r\n",
+                (j - halfWidth) * tScale,
+                (m_heightMap[i][j] - 680.0f),
+                (i - halfHeight) * tScale
+            );
+            OutputDebugStringA(buf);
+            sprintf_s(buf, "v %f %f %f\r\n",
+                (j - halfWidth) * tScale,
+                (m_heightMap[i + 1][j] - 680.0f),
+                ((i + 1) - halfHeight) * tScale
+            );
+            OutputDebugStringA(buf);
+            sprintf_s(buf, "v %f %f %f\r\n",
+                ((j + 1) - halfWidth) * tScale,
+                (m_heightMap[i + 1][j + 1] - 680.0f),
+                ((i + 1) - halfHeight) * tScale
+            );
+            OutputDebugStringA(buf);
+            sprintf_s(buf, "v %f %f %f\r\n",
+                ((j + 1) - halfWidth) * tScale,
+                (m_heightMap[i][j + 1] - 680.0f),
+                (i - halfHeight) * tScale
+            );
+            OutputDebugStringA(buf);
+
+            count += 4;
+        }
     }
-    return m_heightMap[x][y];
+    OutputDebugStringA("\r\nvn 0.0000 -1.000 -0.000\r\n\r\n");
+    for (uint32_t i = 1; i <= count; i += 4)
+    {
+        sprintf_s(buf, "f %d//1 %d//1 %d//1 %d//1\r\n", i, i + 1, i + 2, i + 3);
+        OutputDebugStringA(buf);
+    }
+#endif // AIRPORT_BASE_EXPORT
 }
 
 //-----------------------------------------------------------------------------

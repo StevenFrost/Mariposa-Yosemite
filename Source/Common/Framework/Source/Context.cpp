@@ -22,7 +22,7 @@ namespace Framework
 //-----------------------------------------------------------------------------
 
 Context::Context(int argc, char *argv[]) :
-    m_width(800), m_height(600), m_caption("OpenGL"), m_scene(std::make_shared<Scene>())
+    m_width(800), m_height(600), m_caption("OpenGL"), m_scene(std::make_shared<Scene>()), m_previousFrameTime(0)
 {
     glutInit(&argc, argv);
 }
@@ -60,7 +60,7 @@ void Context::Reshape(int32_t width, int32_t height)
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
 
-    gluPerspective(60.0, static_cast<GLdouble>(m_width) / static_cast<GLdouble>(m_height), 1.0, 10000.0);
+    gluPerspective(60.0, static_cast<GLdouble>(m_width) / static_cast<GLdouble>(m_height), 0.01, 10000.0);
 #ifdef ENABLE_ORTHOGRAPHIC_PROJECTION
     glOrtho(-m_width / 8.0, m_width / 8.0, -m_height / 8.0, m_height / 8.0, 1.0, 10000.0);
 #endif // ENABLE_ORTHOGRAPHIC_PROJECTION

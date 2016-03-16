@@ -75,5 +75,8 @@
     <ClInclude Include="..\Inc\Framework\WavefrontObject.h">
       <Filter>Public Headers</Filter>
     </ClInclude>
+    <ClInclude Include="..\Inc\Framework\AnimatedWavefrontObject.h">
+      <Filter>Public Headers</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

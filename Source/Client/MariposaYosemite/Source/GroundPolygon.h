@@ -23,8 +23,6 @@ public:
 
     GroundPolygon(std::string const& objFile, Framework::TextureManager::Ptr const& textureManager);
     virtual ~GroundPolygon() {}
-
-    virtual void Draw();
 };
 
 //-----------------------------------------------------------------------------

@@ -6,38 +6,27 @@
 
 #pragma once
 
+#include <cstdint>
 #include <memory>
-#include <string>
-#include <vector>
 
-#include <Framework/DisplayableObject.h>
-#include <Framework/TextureManager.h>
+#include <Framework/WavefrontObject.h>
 
 namespace Framework
 {
 
 //-----------------------------------------------------------------------------
 
-class WavefrontObject : public DisplayableObject
+class AnimatedWavefrontObject : public WavefrontObject
 {
 public:
-    WavefrontObject(std::string const& objFile, TextureManager::Ptr const& textureManager);
+    typedef std::shared_ptr<AnimatedWavefrontObject> Ptr;
 
-    virtual void Draw();
+    AnimatedWavefrontObject(std::string const& objFile, TextureManager::Ptr const& textureManager) :
+        WavefrontObject(objFile, textureManager)
+    {}
+    virtual ~AnimatedWavefrontObject() {}
 
-    uint32_t GetNumVertices() const;
-
-private:
-    void ReadOBJ();
-
-protected:
-    TextureManager::Ptr m_textureManager;
-
-    std::string        m_file;
-    std::vector<float> m_data; // { vec3 position, vec3 normal, vec2 texCoord }
-
-private:
-    uint32_t m_numVertices;
+    virtual void Update(uint32_t frameTimeDelta) = 0;
 };
 
 //-----------------------------------------------------------------------------

@@ -34,7 +34,6 @@ private:
 
     void LoadTerrainResources();
     void BuildDisplayList();
-    uint16_t GetCorrectedHeightAt(uint16_t x, uint16_t y);
 
 private:
     const uint16_t m_top    = 1696;

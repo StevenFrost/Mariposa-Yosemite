@@ -22,7 +22,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\Source\Airport.cpp" />
+    <ClCompile Include="..\Source\Aircraft.cpp" />
     <ClCompile Include="..\Source\AirportScene.cpp" />
     <ClCompile Include="..\Source\Application.cpp" />
     <ClCompile Include="..\Source\Environment.cpp" />
@@ -33,7 +33,7 @@
     <ClCompile Include="..\Source\Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Source\Airport.h" />
+    <ClInclude Include="..\Source\Aircraft.h" />
     <ClInclude Include="..\Source\AirportScene.h" />
     <ClInclude Include="..\Source\Application.h" />
     <ClInclude Include="..\Source\Environment.h" />

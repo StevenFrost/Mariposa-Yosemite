@@ -19,14 +19,4 @@ GroundPolygon::GroundPolygon(std::string const& objFile, Framework::TextureManag
 
 //-----------------------------------------------------------------------------
 
-void GroundPolygon::Draw()
-{
-    glPushMatrix();
-    glTranslatef(0.0f, 0.1f, 0.0f);
-    WavefrontObject::Draw();
-    glPopMatrix();
-}
-
-//-----------------------------------------------------------------------------
-
 } // namespace Application

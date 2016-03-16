@@ -9,9 +9,9 @@
 #include <vector>
 
 #include <Framework/Scene.h>
+#include <Framework/WavefrontObject.h>
 
 #include "Environment.h"
-#include "GroundPolygon.h"
 
 namespace Application
 {
@@ -37,7 +37,7 @@ public: // Callbacks
 private:
     Environment::Ptr m_environment;
 
-    std::vector<GroundPolygon::Ptr> m_groundPolygons;
+    std::vector<Framework::WavefrontObject::Ptr> m_groundPolygons;
 };
 
 //-----------------------------------------------------------------------------

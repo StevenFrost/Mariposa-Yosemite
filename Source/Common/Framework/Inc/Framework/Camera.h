@@ -36,6 +36,8 @@ public:
     vec3 GetRightVector() const;
     vec3 GetUpVector() const;
 
+    void SetEyePosition(vec3 position) { m_eyePosition = position; }
+
 public: // Callbacks
     virtual void KeyAction(unsigned char key, bool keyDown, int x, int y);
     virtual void SpecialKeyAction(int key, bool keyDown, int x, int y);
