@@ -15,9 +15,9 @@ namespace Application
 
 OrbitCamera::OrbitCamera(Aircraft::Ptr const& aircraft) :
     m_aircraft(aircraft),
-    m_theta(0.1),
-    m_phi(0.1),
-    m_radius(15.0)
+    m_theta(-3.75),
+    m_phi(-1.24),
+    m_radius(12.0)
 {}
 
 //-----------------------------------------------------------------------------
@@ -49,6 +49,8 @@ void OrbitCamera::MouseAction(int button, bool mouseDown, int x, int y)
     {
         m_radius += button == 4 ? -1.0 : 1.0;
     }
+
+    printf("%.4f, %.4f\r\n", m_theta, m_phi);
 }
 
 //-----------------------------------------------------------------------------
