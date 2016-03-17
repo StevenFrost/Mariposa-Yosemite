@@ -47,10 +47,15 @@ void OrbitCamera::MouseAction(int button, bool mouseDown, int x, int y)
 
     if ((button == 3) || (button == 4))
     {
-        m_radius += button == 4 ? -1.0 : 1.0;
+        if (button == 3)
+        {
+            m_radius += 1.0;
+        }
+        else if (button == 4 && m_radius > 1.0)
+        {
+            m_radius -= 1.0;
+        }
     }
-
-    printf("%.4f, %.4f\r\n", m_theta, m_phi);
 }
 
 //-----------------------------------------------------------------------------

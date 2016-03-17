@@ -29,15 +29,11 @@ Aircraft::Aircraft() :
     m_animation.push_back(std::make_shared<AircraftState>(WaypointType::StraightAndLevel, dvec3(-560.0, 1.0, -74.0), dvec3(0.0, 82.55, 0.0), 0.0));
     m_animation.push_back(std::make_shared<AircraftState>(WaypointType::StraightAndLevel, dvec3(-353.3, 1.0, -44.1), dvec3(0.0, 82.55, 0.0), 30.9));
     m_animation.push_back(std::make_shared<AircraftState>(WaypointType::StraightAndLevel, dvec3(432.0, 149.1, 55.1), dvec3(0.0, 82.55, 0.0), 30.9));
-    m_animation.push_back(std::make_shared<AircraftState>(WaypointType::StraightAndLevel, dvec3(935.1, 136.8, 121.7), dvec3(0.0, 82.55, 0.0), 50.0));
-    m_animation.push_back(std::make_shared<AircraftState>(WaypointType::Turn, dvec3(1335.1, 136.8, 521.7), dvec3(0.0, 352.55, 0.0), dvec3(935.1, 136.8, 521.7), 45.0));
-    m_animation.push_back(std::make_shared<AircraftState>(WaypointType::StraightAndLevel, dvec3(1335.1, 136.8, 600.0), dvec3(0.0, 352.55, 0.0), 50.0));
-    m_animation.push_back(std::make_shared<AircraftState>(WaypointType::Turn, dvec3(935.1, 136.8, 1000.0), dvec3(0.0, 262.55, 0.0), dvec3(935.1, 136.8, 600.0), 45.0));
-    m_animation.push_back(std::make_shared<AircraftState>(WaypointType::StraightAndLevel, dvec3(-1169.5, 136.8, 1000.0), dvec3(0.0, 262.55, 0.0), 50.0));
-    //m_animation.push_back(std::make_shared<AircraftState>(WaypointType::StraightAndLevel, dvec3(-1090.3, 54.5, -151.5), dvec3(0.0, 172.55, 0.0), 45.0));
-    //m_animation.push_back(std::make_shared<AircraftState>(WaypointType::StraightAndLevel, dvec3(-423.5, 1.0, -57.5), dvec3(0.0, 82.55, 0.0), 36.0));
-    //m_animation.push_back(std::make_shared<AircraftState>(WaypointType::StraightAndLevel, dvec3(-250.3, 1.0, -32.5), dvec3(0.0, 82.55, 0.0), 16.0));
-    //m_animation.push_back(std::make_shared<AircraftState>(WaypointType::StraightAndLevel, dvec3(-250.3, 1.0, 14.7), dvec3(0.0, 352.55, 0.0), 5.0));
+    m_animation.push_back(std::make_shared<AircraftState>(WaypointType::StraightAndLevel, dvec3(935.1, 304.8, 121.7), dvec3(0.0, 82.55, 0.0), 50.0));
+    m_animation.push_back(std::make_shared<AircraftState>(WaypointType::Turn, dvec3(1335.1, 304.8, 521.7), dvec3(0.0, 352.55, 0.0), dvec3(935.1, 304.8, 521.7), 45.0));
+    m_animation.push_back(std::make_shared<AircraftState>(WaypointType::StraightAndLevel, dvec3(1335.1, 304.8, 600.0), dvec3(0.0, 352.55, 0.0), 50.0));
+    m_animation.push_back(std::make_shared<AircraftState>(WaypointType::Turn, dvec3(935.1, 304.8, 1000.0), dvec3(0.0, 262.55, 0.0), dvec3(935.1, 304.8, 600.0), 45.0));
+    m_animation.push_back(std::make_shared<AircraftState>(WaypointType::StraightAndLevel, dvec3(-1169.5, 304.8, 1000.0), dvec3(0.0, 262.55, 0.0), 50.0));
 
     m_actualState->Position = m_animation.front()->Position;
 
@@ -65,7 +61,10 @@ void Aircraft::Draw()
         {
             glTranslated(m_actualState->Position.x, m_actualState->Position.y, m_actualState->Position.z);
             glRotated(m_animation.back()->Orientation.y - m_turnAngle, 0.0, 1.0, 0.0);
+
+            glTranslated(0.0, 1.5, 0.0);
             glRotated(m_bankAngle, 0.0, 0.0, 1.0);
+            glTranslated(0.0, -1.5, 0.0);
         }
         else
         {
