@@ -6,31 +6,28 @@
 
 #pragma once
 
-#include <map>
-#include <memory>
-#include <string>
+#include <Framework/DisplayableObject.h>
+#include <Framework/TextureManager.h>
 
 #include <GL/freeglut.h>
 
-namespace Framework
+namespace Application
 {
 
 //-----------------------------------------------------------------------------
 
-class TextureManager
+class SkyBox : public Framework::DisplayableObject
 {
 public:
-    typedef std::shared_ptr<TextureManager> Ptr;
+    SkyBox(Framework::TextureManager::Ptr const& textureManager);
+    virtual ~SkyBox() {}
 
-    TextureManager() {}
-    virtual ~TextureManager();
-
-    GLuint GetTexture(std::string const& fileName, bool linear = true, bool repeat = true, bool generateMips = true);
+    virtual void Draw();
 
 private:
-    std::map<std::string, GLuint> m_textures;
+    GLuint m_textureHandles[6];
 };
 
 //-----------------------------------------------------------------------------
 
-} // namespace Framework
+} // namespace Application

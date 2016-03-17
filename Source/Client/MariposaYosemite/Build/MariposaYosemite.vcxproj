@@ -31,6 +31,7 @@
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\Source\OrbitCamera.cpp" />
+    <ClCompile Include="..\Source\SkyBox.cpp" />
     <ClCompile Include="..\Source\Terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -42,6 +43,7 @@
     <ClInclude Include="..\Source\MariposaYosemitePch.h" />
     <ClInclude Include="..\Source\OrbitCamera.h" />
     <ClInclude Include="..\Source\PerformanceCounter.h" />
+    <ClInclude Include="..\Source\SkyBox.h" />
     <ClInclude Include="..\Source\Terrain.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

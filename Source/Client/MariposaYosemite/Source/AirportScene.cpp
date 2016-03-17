@@ -17,6 +17,7 @@
 #include "Aircraft.h"
 #include "GroundPolygon.h"
 #include "OrbitCamera.h"
+#include "SkyBox.h"
 #include "Terrain.h"
 
 namespace Application
@@ -36,6 +37,7 @@ AirportScene::AirportScene(Environment::Ptr const& environment) :
 
 void AirportScene::Initialise()
 {
+    auto skybox = std::make_shared<SkyBox>(m_environment->GetTextureManager());
     auto terrain = std::make_shared<Application::Terrain>(m_environment->GetTextureManager());
     auto airportBase = std::make_shared<Framework::TexturedWavefrontObject>(R"(Resources\airport-base.obj)", m_environment->GetTextureManager());
     auto aircraft = std::make_shared<Aircraft>();
@@ -47,6 +49,7 @@ void AirportScene::Initialise()
     auto runway = std::make_shared<GroundPolygon>(R"(Resources\runway.obj)", m_environment->GetTextureManager());
 
 
+    m_objects.push_back(skybox);
     m_objects.push_back(terrain);
     m_objects.push_back(airportBase);
     m_objects.push_back(aircraft);
