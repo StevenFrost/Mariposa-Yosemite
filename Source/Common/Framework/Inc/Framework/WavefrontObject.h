@@ -47,7 +47,7 @@ class TexturedWavefrontObject : public Framework::WavefrontObject
 public:
     TexturedWavefrontObject(std::string const& file, Framework::TextureManager::Ptr const& textureManager) :
         WavefrontObject(file, textureManager),
-        m_textureHandle(textureManager->GetTexture(R"(Resources\ortho.bmp)"))
+        m_textureHandle(textureManager->GetTexture_SOIL(R"(Resources\ortho.jpg)"))
     {}
 
     virtual ~TexturedWavefrontObject() {}

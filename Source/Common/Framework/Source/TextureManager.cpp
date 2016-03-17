@@ -9,6 +9,7 @@
 #include <Framework/TextureManager.h>
 
 #include <iostream>
+#include <SOIL/SOIL.h>
 #include <Windows.h>
 
 namespace Framework
@@ -26,7 +27,7 @@ TextureManager::~TextureManager(void)
 
 //-----------------------------------------------------------------------------
 
-GLuint TextureManager::GetTexture(std::string const& fileName, bool linear, bool repeat, bool generateMips)
+GLuint TextureManager::GetTexture_BMP(std::string const& fileName, bool linear, bool repeat, bool generateMips)
 {
     auto it = m_textures.find(fileName);
     if (it != m_textures.end())
@@ -126,6 +127,44 @@ GLuint TextureManager::GetTexture(std::string const& fileName, bool linear, bool
 
     delete[] pixelBuffer;
     fclose(file);
+
+    m_textures.insert(m_textures.end(), std::make_pair(fileName, handle));
+    return handle;
+}
+
+//-----------------------------------------------------------------------------
+
+GLuint TextureManager::GetTexture_SOIL(std::string const& fileName, bool linear, bool repeat, bool generateMips)
+{
+    auto it = m_textures.find(fileName);
+    if (it != m_textures.end())
+    {
+        return it->second;
+    }
+
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+
+    GLuint handle;
+    glGenTextures(1, &handle);
+    glBindTexture(GL_TEXTURE_2D, handle);
+
+    GLuint flags = SOIL_FLAG_INVERT_Y;
+    if (repeat)
+    {
+        flags |= SOIL_FLAG_TEXTURE_REPEATS;
+    }
+    if (generateMips)
+    {
+        flags |= SOIL_FLAG_MIPMAPS;
+    }
+
+    handle = SOIL_load_OGL_texture(fileName.c_str(), SOIL_LOAD_RGB, handle, flags);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, linear ? GL_LINEAR : GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, generateMips ? (linear ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST) : (linear ? GL_LINEAR : GL_NEAREST));
+
+    glDisable(GL_TEXTURE_2D);
 
     m_textures.insert(m_textures.end(), std::make_pair(fileName, handle));
     return handle;

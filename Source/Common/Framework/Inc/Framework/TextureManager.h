@@ -25,7 +25,8 @@ public:
     TextureManager() {}
     virtual ~TextureManager();
 
-    GLuint GetTexture(std::string const& fileName, bool linear = true, bool repeat = true, bool generateMips = true);
+    GLuint GetTexture_BMP(std::string const& fileName, bool linear = true, bool repeat = true, bool generateMips = true);
+    GLuint GetTexture_SOIL(std::string const& fileName, bool linear = true, bool repeat = true, bool generateMips = true);
 
 private:
     std::map<std::string, GLuint> m_textures;

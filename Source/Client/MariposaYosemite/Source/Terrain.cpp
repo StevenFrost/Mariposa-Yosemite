@@ -160,7 +160,7 @@ void Terrain::LoadTerrainResources()
     }
 
     BuildHeightMapFromFile(R"(Resources\N37W121.hgt)");
-    m_orthoTextureHandle = m_textureManager->GetTexture(R"(Resources\ortho.bmp)");
+    m_orthoTextureHandle = m_textureManager->GetTexture_SOIL(R"(Resources\ortho.jpg)");
 }
 
 //-----------------------------------------------------------------------------
