@@ -15,26 +15,20 @@ namespace Application
 
 //-----------------------------------------------------------------------------
 
-class OrbitCamera : public Framework::Camera
+class CockpitCamera : public Framework::Camera
 {
 public:
-    OrbitCamera(Aircraft::Ptr const& aircraft);
-    virtual ~OrbitCamera() {}
+    CockpitCamera(Aircraft::Ptr const& aircraft);
+    virtual ~CockpitCamera() {}
 
-    virtual void Look();
-    virtual void Update(uint32_t frameTimeDelta) {}
+    virtual void Update(uint32_t frameTimeDelta);
 
 public: // Callbacks
-    virtual void MouseAction(int button, bool mouseDown, int x, int y);
-    virtual void MouseMotion(int x, int y);
+    virtual void KeyAction(unsigned char key, bool keyDown, int x, int y) {}
+    virtual void SpecialKeyAction(int key, bool keyDown, int x, int y) {}
 
 private:
     Aircraft::Ptr m_aircraft;
-
-    double m_theta;
-    double m_phi;
-
-    double m_radius;
 };
 
 //-----------------------------------------------------------------------------

@@ -72,7 +72,13 @@ void Camera::Update(uint32_t frameTimeDelta)
     {
         m_eyePosition = m_eyePosition - (m_forward * delta);
     }
-    Look();
+}
+
+//-----------------------------------------------------------------------------
+
+void Camera::Projection(int32_t width, int32_t height)
+{
+    gluPerspective(60.0, static_cast<GLdouble>(width) / static_cast<GLdouble>(height), 0.1, 50000.0);
 }
 
 //-----------------------------------------------------------------------------

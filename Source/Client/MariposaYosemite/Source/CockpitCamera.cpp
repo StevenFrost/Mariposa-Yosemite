@@ -4,38 +4,25 @@
 *                                                           *
 ************************************************************/
 
-#pragma once
+#include "MariposaYosemitePch.h"
 
-#include <Framework/Camera.h>
-
-#include "Aircraft.h"
+#include "CockpitCamera.h"
 
 namespace Application
 {
 
 //-----------------------------------------------------------------------------
 
-class OrbitCamera : public Framework::Camera
+CockpitCamera::CockpitCamera(Aircraft::Ptr const& aircraft) :
+    m_aircraft(aircraft)
+{}
+
+//-----------------------------------------------------------------------------
+
+void CockpitCamera::Update(uint32_t frameTimeDelta)
 {
-public:
-    OrbitCamera(Aircraft::Ptr const& aircraft);
-    virtual ~OrbitCamera() {}
-
-    virtual void Look();
-    virtual void Update(uint32_t frameTimeDelta) {}
-
-public: // Callbacks
-    virtual void MouseAction(int button, bool mouseDown, int x, int y);
-    virtual void MouseMotion(int x, int y);
-
-private:
-    Aircraft::Ptr m_aircraft;
-
-    double m_theta;
-    double m_phi;
-
-    double m_radius;
-};
+    m_eyePosition = m_aircraft->GetPosition() + dvec3(-0.25, 1.7, 0.0);
+}
 
 //-----------------------------------------------------------------------------
 

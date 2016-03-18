@@ -7,6 +7,7 @@
 #pragma once
 
 #include <map>
+#include <memory>
 #include <vector>
 
 #include <Framework/Camera.h>
@@ -24,12 +25,13 @@ enum class CameraType
 {
     Roaming,
     Orbit,
-    Cockpit
+    Cockpit,
+    TopDown
 };
 
 //-----------------------------------------------------------------------------
 
-class AirportScene : public Framework::Scene
+class AirportScene : public Framework::Scene, public std::enable_shared_from_this<AirportScene>
 {
 public:
     typedef std::shared_ptr<AirportScene> Ptr;
@@ -42,6 +44,10 @@ public:
 
 public: // Callbacks
     virtual void KeyAction(unsigned char key, bool keyDown, int x, int y);
+
+private:
+    void AttachProjectionListener();
+    void CameraProjectionChanged();
 
 private:
     Environment::Ptr m_environment;

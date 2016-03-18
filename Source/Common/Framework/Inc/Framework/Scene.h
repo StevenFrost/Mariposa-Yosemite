@@ -32,6 +32,8 @@ public:
     virtual void Update(uint32_t frameTimeDelta);
 
 public: // Callbacks
+    virtual void Reshape(int32_t width, int32_t height);
+
     virtual void KeyAction(unsigned char key, bool keyDown, int x, int y);
     virtual void SpecialKeyAction(int key, bool keyDown, int x, int y);
 
@@ -43,6 +45,9 @@ protected:
     std::vector<DisplayableObject::Ptr> m_objects;
 
     Camera::Ptr m_camera;
+
+    int32_t m_width;
+    int32_t m_height;
 };
 
 //-----------------------------------------------------------------------------

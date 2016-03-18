@@ -58,6 +58,10 @@ void WavefrontMesh::Draw()
         glDisable(GL_TEXTURE_2D);
         if (m_material != nullptr)
         {
+            if (m_material->Transparency != 1.0)
+            {
+                glDepthMask(GL_FALSE);
+            }
             glColor4f(m_material->Diffuse.x, m_material->Diffuse.y, m_material->Diffuse.z, m_material->Transparency);
         }
         else
@@ -332,6 +336,7 @@ void WavefrontObject::Read_MTL(std::string const& fileName)
         }
     }
 
+    m_materials.insert(std::make_pair(material->Name, material));
     stream.close();
 }
 

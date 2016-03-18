@@ -57,17 +57,7 @@ void Context::Reshape(int32_t width, int32_t height)
     m_width = width;
     m_height = height;
 
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-
-    gluPerspective(60.0, static_cast<GLdouble>(m_width) / static_cast<GLdouble>(m_height), 0.1, 50000.0);
-#ifdef ENABLE_ORTHOGRAPHIC_PROJECTION
-    glOrtho(-m_width / 8.0, m_width / 8.0, -m_height / 8.0, m_height / 8.0, 1.0, 10000.0);
-#endif // ENABLE_ORTHOGRAPHIC_PROJECTION
-
-    glMatrixMode(GL_MODELVIEW);
-
-    glViewport(0, 0, static_cast<GLsizei>(m_width), static_cast<GLsizei>(m_height));
+    m_scene->Reshape(width, height);
 }
 
 //-----------------------------------------------------------------------------

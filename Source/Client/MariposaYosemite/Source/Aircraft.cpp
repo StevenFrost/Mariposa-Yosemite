@@ -19,7 +19,7 @@ namespace Application
 //-----------------------------------------------------------------------------
 
 Aircraft::Aircraft() :
-    AnimatedWavefrontObject(R"(Resources\piper-j3-cub.obj)", nullptr),
+    AnimatedWavefrontObject(R"(Resources\j3-body.obj)", nullptr),
     m_actualState(std::make_shared<AircraftState>()),
     m_animationTime(0),
     m_startTime(0),
@@ -43,6 +43,13 @@ Aircraft::Aircraft() :
     {
         (*it)->TimeStamp = (*(it - 1))->TimeStamp + static_cast<uint32_t>((((*it)->Position - (*(it - 1))->Position).GetNorm() / ((*it)->Speed * 1.0)) * 1000.0);
     }
+
+    m_rudder       = std::make_shared<ControlSurface>(R"(Resources\j3-rudder.obj)",    vec3(-0.012f, -2.1f, 4.724f));
+    m_elevators    = std::make_shared<ControlSurface>(R"(Resources\j3-elevators.obj)", vec3(-0.012f, -1.749f, 4.669f));
+    m_leftAileron  = std::make_shared<ControlSurface>(R"(Resources\j3-aileron-left.obj)",  vec3(-0.012f, -1.922f, 1.2f));
+    m_rightAileron = std::make_shared<ControlSurface>(R"(Resources\j3-aileron-right.obj)", vec3(-0.012f, -1.922f, 1.2f));
+
+    m_prop = std::make_shared<Prop>();
 }
 
 //-----------------------------------------------------------------------------
@@ -73,6 +80,13 @@ void Aircraft::Draw()
         }
 
         WavefrontObject::Draw();
+
+        m_rudder->Draw();
+        m_elevators->Draw();
+        m_leftAileron->Draw();
+        m_rightAileron->Draw();
+
+        m_prop->Draw();
     }
     glPopMatrix();
     glPopAttrib();
@@ -115,11 +129,21 @@ void Aircraft::Update(uint32_t frameTimeDelta)
         {
             auto frac = (m_animationTime - previous->TimeStamp) / 1500.0;
             m_bankAngle = 20.0 * frac;
+
+            m_rudder->SetRotation(vec3(0.0f, static_cast<float>(m_bankAngle), 0.0f));
+            m_elevators->SetRotation(vec3(static_cast<float>(m_bankAngle), 0.0f, 0.0f));
+            m_leftAileron->SetRotation(vec3(-static_cast<float>(m_bankAngle), 0.0f, 0.0f));
+            m_rightAileron->SetRotation(vec3(static_cast<float>(m_bankAngle), 0.0f, 0.0f));
         }
         if (m_animationTime > next->TimeStamp - 1500)
         {
             auto frac = (next->TimeStamp - m_animationTime) / 1500.0;
             m_bankAngle = 20.0 * frac;
+
+            m_rudder->SetRotation(vec3(0.0f, static_cast<float>(m_bankAngle), 0.0f));
+            m_elevators->SetRotation(vec3(static_cast<float>(m_bankAngle), 0.0f, 0.0f));
+            m_leftAileron->SetRotation(vec3(-static_cast<float>(m_bankAngle), 0.0f, 0.0f));
+            m_rightAileron->SetRotation(vec3(static_cast<float>(m_bankAngle), 0.0f, 0.0f));
         }
 
         m_turnAngle = 90.0 * fraction;
@@ -132,6 +156,8 @@ void Aircraft::Update(uint32_t frameTimeDelta)
     }
 
     m_actualState->Orientation.y = next->Orientation.y;
+
+    m_prop->Update(frameTimeDelta);
 }
 
 //-----------------------------------------------------------------------------

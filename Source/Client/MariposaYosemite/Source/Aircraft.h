@@ -71,6 +71,66 @@ struct AircraftState
 
 //-----------------------------------------------------------------------------
 
+class Prop : public Framework::AnimatedWavefrontObject
+{
+public:
+    typedef std::shared_ptr<Prop> Ptr;
+
+    Prop() :
+        AnimatedWavefrontObject(R"(Resources\j3-prop.obj)", nullptr)
+    {}
+    virtual ~Prop() {}
+
+    virtual void Draw()
+    {
+        glPushMatrix();
+            glTranslatef(0.012f, 1.352f, -1.399f);
+            glRotatef(m_rotation.z, 0.0f, 0.0f, 1.0f);
+            glTranslatef(-0.012f, -1.352f, 1.399f);
+
+            AnimatedWavefrontObject::Draw();
+        glPopMatrix();
+    }
+    virtual void Update(uint32_t frameTimeDelta)
+    {
+        m_rotation.z += 13000.0f * (frameTimeDelta / 1000.0f);
+    }
+};
+
+//-----------------------------------------------------------------------------
+
+class ControlSurface : public Framework::AnimatedWavefrontObject
+{
+public:
+    typedef std::shared_ptr<ControlSurface> Ptr;
+
+    ControlSurface(std::string const& objFile, vec3 offset) :
+        AnimatedWavefrontObject(objFile, nullptr),
+        m_offset(offset)
+    {}
+    virtual ~ControlSurface() {}
+
+    virtual void Draw()
+    {
+        glPushMatrix();
+            glTranslatef(-m_offset.x, -m_offset.y, -m_offset.z);
+            glRotatef(m_rotation.x, 1.0f, 0.0f, 0.0f);
+            glRotatef(m_rotation.y, 0.0f, 1.0f, 0.0f);
+            glRotatef(m_rotation.z, 0.0f, 0.0f, 1.0f);
+            glTranslatef(m_offset.x, m_offset.y, m_offset.z);
+
+            AnimatedWavefrontObject::Draw();
+        glPopMatrix();
+    }
+
+    virtual void Update(uint32_t frameTimeDelta) {}
+
+private:
+    vec3 m_offset;
+};
+
+//-----------------------------------------------------------------------------
+
 class Aircraft : public Framework::AnimatedWavefrontObject
 {
 public:
@@ -95,9 +155,16 @@ private:
 
     double m_turnAngle;
     double m_bankAngle;
-    //dvec3 m_turnCenter;
 
     AircraftState::Ptr m_actualState;
+
+    // Control surfaces
+    ControlSurface::Ptr m_rudder;
+    ControlSurface::Ptr m_elevators;
+    ControlSurface::Ptr m_leftAileron;
+    ControlSurface::Ptr m_rightAileron;
+
+    Prop::Ptr m_prop;
 };
 
 //-----------------------------------------------------------------------------

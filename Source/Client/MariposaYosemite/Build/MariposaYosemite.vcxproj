@@ -25,6 +25,7 @@
     <ClCompile Include="..\Source\Aircraft.cpp" />
     <ClCompile Include="..\Source\AirportScene.cpp" />
     <ClCompile Include="..\Source\Application.cpp" />
+    <ClCompile Include="..\Source\CockpitCamera.cpp" />
     <ClCompile Include="..\Source\Environment.cpp" />
     <ClCompile Include="..\Source\GroundPolygon.cpp" />
     <ClCompile Include="..\Source\MariposaYosemitePch.cpp">
@@ -33,11 +34,13 @@
     <ClCompile Include="..\Source\OrbitCamera.cpp" />
     <ClCompile Include="..\Source\SkyBox.cpp" />
     <ClCompile Include="..\Source\Terrain.cpp" />
+    <ClCompile Include="..\Source\TopDownCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Aircraft.h" />
     <ClInclude Include="..\Source\AirportScene.h" />
     <ClInclude Include="..\Source\Application.h" />
+    <ClInclude Include="..\Source\CockpitCamera.h" />
     <ClInclude Include="..\Source\Environment.h" />
     <ClInclude Include="..\Source\GroundPolygon.h" />
     <ClInclude Include="..\Source\MariposaYosemitePch.h" />
@@ -45,6 +48,7 @@
     <ClInclude Include="..\Source\PerformanceCounter.h" />
     <ClInclude Include="..\Source\SkyBox.h" />
     <ClInclude Include="..\Source\Terrain.h" />
+    <ClInclude Include="..\Source\TopDownCamera.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>
