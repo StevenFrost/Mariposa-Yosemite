@@ -148,7 +148,10 @@ void Camera::SpecialKeyAction(int key, bool keyDown, int x, int y)
 
 void Camera::MouseAction(int button, bool mouseDown, int x, int y)
 {
-    m_mouseDown = mouseDown;
+    if (button == GLUT_LEFT_BUTTON)
+    {
+        m_mouseDown = mouseDown;
+    }
     m_mouseX = x;
     m_mouseY = y;
 }

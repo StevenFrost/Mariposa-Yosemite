@@ -42,9 +42,13 @@ public:
 
     virtual void Initialise();
     virtual void Draw();
+    virtual void Update(uint32_t frameTimeDelta);
 
 public: // Callbacks
     virtual void KeyAction(unsigned char key, bool keyDown, int x, int y);
+    virtual void SpecialKeyAction(int key, bool keyDown, int x, int y);
+
+    virtual void MouseAction(int button, bool mouseDown, int x, int y);
 
 private:
     void AttachProjectionListener();
@@ -55,8 +59,11 @@ private:
 
     std::vector<GroundPolygon::Ptr>              m_groundPolygons;
     std::map<CameraType, Framework::Camera::Ptr> m_cameras;
+
+    std::vector<Framework::UserControlledDisplayableObject::Ptr> m_selectableObjects;
+    Framework::UserControlledDisplayableObject::Ptr              m_selectedObject;
 };
 
 //-----------------------------------------------------------------------------
 
-} // Application
+} // namespace Application

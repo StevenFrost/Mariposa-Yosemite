@@ -28,7 +28,8 @@ namespace Application
 //-----------------------------------------------------------------------------
 
 AirportScene::AirportScene(Environment::Ptr const& environment) :
-    m_environment(environment)
+    m_environment(environment),
+    m_selectedObject(nullptr)
 {}
 
 //-----------------------------------------------------------------------------
@@ -50,12 +51,14 @@ void AirportScene::Initialise()
     // General 3D Objects
     m_objects.push_back(std::make_shared<SkyBox>(m_environment->GetTextureManager()));
     m_objects.push_back(std::make_shared<Terrain>(m_environment->GetTextureManager()));
-    m_objects.push_back(std::make_shared<THangar>(vec3(31.277f, 0.0f, 121.099f), -14.0f, m_environment->GetTextureManager()));
-    m_objects.push_back(std::make_shared<THangar>(vec3(27.773f, 0.0f, 135.265f), -14.0f, m_environment->GetTextureManager()));
-    m_objects.push_back(std::make_shared<THangar>(vec3(18.667f, 0.0f, 110.459f), 166.0f, m_environment->GetTextureManager()));
-    m_objects.push_back(std::make_shared<THangar>(vec3(15.191f, 0.0f, 124.403f), 166.0f, m_environment->GetTextureManager()));
-    m_objects.push_back(std::make_shared<THangar>(vec3(11.694f, 0.0f, 138.426f), 166.0f, m_environment->GetTextureManager()));
     m_objects.push_back(aircraft);
+
+    // User Controlled Objects
+    m_selectableObjects.push_back(std::make_shared<THangar>(vec3(31.277f, 0.0f, 121.099f), -14.0f, m_environment->GetTextureManager()));
+    m_selectableObjects.push_back(std::make_shared<THangar>(vec3(27.773f, 0.0f, 135.265f), -14.0f, m_environment->GetTextureManager()));
+    m_selectableObjects.push_back(std::make_shared<THangar>(vec3(18.667f, 0.0f, 110.459f), 166.0f, m_environment->GetTextureManager()));
+    m_selectableObjects.push_back(std::make_shared<THangar>(vec3(15.191f, 0.0f, 124.403f), 166.0f, m_environment->GetTextureManager()));
+    m_selectableObjects.push_back(std::make_shared<THangar>(vec3(11.694f, 0.0f, 138.426f), 166.0f, m_environment->GetTextureManager()));
 
     // Cameras
     m_cameras.insert(std::make_pair(CameraType::Roaming, roamingCamera));
@@ -91,6 +94,13 @@ void AirportScene::Draw()
         object->Draw();
     }
 
+    for (size_t i = 0; i < m_selectableObjects.size(); ++i)
+    {
+        auto& object = m_selectableObjects.at(i);
+        glLoadName(i + 1);
+        object->Draw();
+    }
+
     glDepthMask(GL_FALSE);
     glStencilFunc(GL_NOTEQUAL, 1, 1);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
@@ -100,6 +110,18 @@ void AirportScene::Draw()
     }
 
     glDepthMask(GL_TRUE);
+}
+
+//-----------------------------------------------------------------------------
+
+void AirportScene::Update(uint32_t frameTimeDelta)
+{
+    Scene::Update(frameTimeDelta);
+
+    if (m_selectedObject != nullptr)
+    {
+        m_selectedObject->Update(frameTimeDelta);
+    }
 }
 
 //-----------------------------------------------------------------------------
@@ -137,6 +159,65 @@ void AirportScene::KeyAction(unsigned char key, bool keyDown, int x, int y)
             Reshape(m_width, m_height);
             break;
         }
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+void AirportScene::SpecialKeyAction(int key, bool keyDown, int x, int y)
+{
+    Scene::SpecialKeyAction(key, keyDown, x, y);
+
+    if (m_selectedObject != nullptr)
+    {
+        m_selectedObject->SpecialKeyAction(key, keyDown, x, y);
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+void AirportScene::MouseAction(int button, bool mouseDown, int x, int y)
+{
+    Scene::MouseAction(button, mouseDown, x, y);
+
+    if (mouseDown && button == GLUT_RIGHT_BUTTON)
+    {
+        GLuint buff[64] = { 0 };
+        GLint hits, view[4];
+
+        glSelectBuffer(64, buff);
+
+        glGetIntegerv(GL_VIEWPORT, view);
+        glRenderMode(GL_SELECT);
+
+        glInitNames();
+        glPushName(0);
+
+        glMatrixMode(GL_PROJECTION);
+        glPushMatrix();
+            glLoadIdentity();
+
+            gluPickMatrix(x, m_height - y - 1.0, 1.0, 1.0, view);
+            m_camera->Projection(m_width, m_height);
+
+            glMatrixMode(GL_MODELVIEW);
+            Draw();
+            glMatrixMode(GL_PROJECTION);
+        glPopMatrix();
+
+        hits = glRenderMode(GL_RENDER);
+
+        m_selectedObject = nullptr;
+        for (int i = 0; i < hits; ++i)
+        {
+            if (m_selectedObject == nullptr && buff[i * 4 + 3] != 0)
+            {
+                m_selectedObject = m_selectableObjects.at(buff[i * 4 + 3] - 1);
+            }
+        }
+
+        glMatrixMode(GL_MODELVIEW);
+        glPopName();
     }
 }
 

@@ -17,7 +17,9 @@ namespace Application
 
 THangar::THangar(vec3 position, float angle, Framework::TextureManager::Ptr const& textureManager) :
     m_animationTime(0),
-    m_doorAngle(0.0f)
+    m_doorAngle(0.0f),
+    m_upKeyPressed(false),
+    m_downKeyPressed(false)
 {
     m_position = position;
     m_rotation = vec3(0.0f, angle, 0.0f);
@@ -70,10 +72,40 @@ void THangar::Draw()
 
 void THangar::Update(uint32_t frameTimeDelta)
 {
-    m_animationTime += frameTimeDelta;
+    float angleDelta = 8.0f * (frameTimeDelta / 1000.0f);
 
-    float position = (sin(m_animationTime / 10000.0f) + 1) * 0.5f;
-    m_doorAngle = 85.0f * position;
+    if (m_upKeyPressed)
+    {
+        m_doorAngle += angleDelta;
+    }
+    else if (m_downKeyPressed)
+    {
+        m_doorAngle -= angleDelta;
+    }
+
+    if (m_doorAngle < 0.0f)
+    {
+        m_doorAngle = 0.0f;
+    }
+    else if (m_doorAngle > 88.0f)
+    {
+        m_doorAngle = 88.0f;
+    }
+}
+
+//-----------------------------------------------------------------------------
+
+void THangar::SpecialKeyAction(int key, bool keyDown, int x, int y)
+{
+    switch (key)
+    {
+    case GLUT_KEY_UP:
+        m_upKeyPressed = keyDown;
+        break;
+    case GLUT_KEY_DOWN:
+        m_downKeyPressed = keyDown;
+        break;
+    }
 }
 
 //-----------------------------------------------------------------------------

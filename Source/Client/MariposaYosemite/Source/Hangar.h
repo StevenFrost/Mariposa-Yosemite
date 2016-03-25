@@ -14,7 +14,7 @@ namespace Application
 
 //-----------------------------------------------------------------------------
 
-class THangar : public Framework::DisplayableObject
+class THangar : public Framework::UserControlledDisplayableObject
 {
 public:
     THangar(vec3 position, float angle, Framework::TextureManager::Ptr const& textureManager);
@@ -23,11 +23,17 @@ public:
     virtual void Draw();
     virtual void Update(uint32_t frameTimeDelta);
 
+public: // Callbacks
+    virtual void SpecialKeyAction(int key, bool keyDown, int x, int y);
+
 private:
     GLuint m_textureHandle;
 
     uint32_t m_animationTime;
     float    m_doorAngle;
+
+    bool m_upKeyPressed;
+    bool m_downKeyPressed;
 
     Framework::WavefrontObject::Ptr m_body;
     Framework::WavefrontObject::Ptr m_doorSegment;
