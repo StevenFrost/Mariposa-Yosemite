@@ -21,8 +21,13 @@ class GroundPolygon : public Framework::WavefrontObject
 public:
     typedef std::shared_ptr<GroundPolygon> Ptr;
 
-    GroundPolygon(std::string const& objFile, Framework::TextureManager::Ptr const& textureManager);
+    GroundPolygon(std::string const& objFile, std::string const& textureFile, Framework::TextureManager::Ptr const& textureManager);
     virtual ~GroundPolygon() {}
+    
+    virtual void Draw();
+
+private:
+    GLuint m_textureHandle;
 };
 
 //-----------------------------------------------------------------------------

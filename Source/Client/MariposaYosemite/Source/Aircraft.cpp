@@ -19,7 +19,7 @@ namespace Application
 //-----------------------------------------------------------------------------
 
 Aircraft::Aircraft() :
-    AnimatedWavefrontObject(R"(Resources\j3-body.obj)", nullptr),
+    WavefrontObject(R"(Resources\j3-body.obj)"),
     m_actualState(std::make_shared<AircraftState>()),
     m_animationTime(0),
     m_startTime(0),

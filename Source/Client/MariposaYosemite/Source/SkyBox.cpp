@@ -15,12 +15,18 @@ namespace Application
 
 SkyBox::SkyBox(Framework::TextureManager::Ptr const& textureManager)
 {
-    m_textureHandles[0] = (textureManager->GetTexture_SOIL(R"(Resources\sb_up.png)", false, false, false));
-    m_textureHandles[1] = (textureManager->GetTexture_SOIL(R"(Resources\sb_down.png)", false, false, false));
-    m_textureHandles[2] = (textureManager->GetTexture_SOIL(R"(Resources\sb_south.png)", false, false, false));
-    m_textureHandles[3] = (textureManager->GetTexture_SOIL(R"(Resources\sb_west.png)", false, false, false));
-    m_textureHandles[4] = (textureManager->GetTexture_SOIL(R"(Resources\sb_north.png)", false, false, false));
-    m_textureHandles[5] = (textureManager->GetTexture_SOIL(R"(Resources\sb_east.png)", false, false, false));
+    Framework::TextureLoadOptions options;
+    options.Linear          = false;
+    options.Repeat          = false;
+    options.GenerateMipMaps = false;
+    options.DirectLoadDDS   = true;
+
+    m_textureHandles[0] = textureManager->GetTexture_SOIL(R"(Resources\sb_up.dds)", options);
+    m_textureHandles[1] = textureManager->GetTexture_SOIL(R"(Resources\sb_down.dds)", options);
+    m_textureHandles[2] = textureManager->GetTexture_SOIL(R"(Resources\sb_south.dds)", options);
+    m_textureHandles[3] = textureManager->GetTexture_SOIL(R"(Resources\sb_west.dds)", options);
+    m_textureHandles[4] = textureManager->GetTexture_SOIL(R"(Resources\sb_north.dds)", options);
+    m_textureHandles[5] = textureManager->GetTexture_SOIL(R"(Resources\sb_east.dds)", options);
 }
 
 //-----------------------------------------------------------------------------

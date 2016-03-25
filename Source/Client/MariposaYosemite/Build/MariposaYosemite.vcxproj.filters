@@ -44,6 +44,9 @@
     <ClCompile Include="..\Source\TopDownCamera.cpp">
       <Filter>Cameras</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Hangar.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Terrain.h">
@@ -77,6 +80,9 @@
     </ClInclude>
     <ClInclude Include="..\Source\TopDownCamera.h">
       <Filter>Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Hangar.h">
+      <Filter>Objects</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

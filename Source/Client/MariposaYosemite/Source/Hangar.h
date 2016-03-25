@@ -6,29 +6,33 @@
 
 #pragma once
 
-#include <cstdint>
-#include <memory>
-
+#include <Framework/TextureManager.h>
 #include <Framework/WavefrontObject.h>
 
-namespace Framework
+namespace Application
 {
 
 //-----------------------------------------------------------------------------
 
-class AnimatedWavefrontObject : public WavefrontObject
+class THangar : public Framework::DisplayableObject
 {
 public:
-    typedef std::shared_ptr<AnimatedWavefrontObject> Ptr;
+    THangar(vec3 position, float angle, Framework::TextureManager::Ptr const& textureManager);
+    virtual ~THangar() {}
 
-    AnimatedWavefrontObject(std::string const& objFile, TextureManager::Ptr const& textureManager) :
-        WavefrontObject(objFile, textureManager)
-    {}
-    virtual ~AnimatedWavefrontObject() {}
+    virtual void Draw();
+    virtual void Update(uint32_t frameTimeDelta);
 
-    virtual void Update(uint32_t frameTimeDelta) = 0;
+private:
+    GLuint m_textureHandle;
+
+    uint32_t m_animationTime;
+    float    m_doorAngle;
+
+    Framework::WavefrontObject::Ptr m_body;
+    Framework::WavefrontObject::Ptr m_doorSegment;
 };
 
 //-----------------------------------------------------------------------------
 
-} // namespace Framework
+} // namespace Application

@@ -17,6 +17,16 @@ namespace Framework
 
 //-----------------------------------------------------------------------------
 
+struct TextureLoadOptions
+{
+    bool Linear;
+    bool Repeat;
+    bool GenerateMipMaps;
+    bool DirectLoadDDS;
+};
+
+//-----------------------------------------------------------------------------
+
 class TextureManager
 {
 public:
@@ -25,8 +35,11 @@ public:
     TextureManager() {}
     virtual ~TextureManager();
 
-    GLuint GetTexture_BMP(std::string const& fileName, bool linear = true, bool repeat = true, bool generateMips = true);
-    GLuint GetTexture_SOIL(std::string const& fileName, bool linear = true, bool repeat = true, bool generateMips = true);
+    GLuint GetTexture_BMP(std::string const& fileName);
+    GLuint GetTexture_BMP(std::string const& fileName, TextureLoadOptions const& options);
+
+    GLuint GetTexture_SOIL(std::string const& fileName);
+    GLuint GetTexture_SOIL(std::string const& fileName, TextureLoadOptions const& options);
 
 private:
     std::map<std::string, GLuint> m_textures;

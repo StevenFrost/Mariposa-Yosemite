@@ -16,7 +16,7 @@
 
 #include "Aircraft.h"
 #include "CockpitCamera.h"
-#include "GroundPolygon.h"
+#include "Hangar.h"
 #include "OrbitCamera.h"
 #include "SkyBox.h"
 #include "Terrain.h"
@@ -35,10 +35,6 @@ AirportScene::AirportScene(Environment::Ptr const& environment) :
 
 void AirportScene::Initialise()
 {
-    auto skybox = std::make_shared<SkyBox>(m_environment->GetTextureManager());
-    auto terrain = std::make_shared<Application::Terrain>(m_environment->GetTextureManager());
-    auto airportBase = std::make_shared<Framework::TexturedWavefrontObject>(R"(Resources\airport-base.obj)", m_environment->GetTextureManager());
-    auto buildings = std::make_shared<Framework::WavefrontObject>(R"(Resources\buildings.obj)", nullptr);
     auto aircraft = std::make_shared<Aircraft>();
 
     auto roamingCamera = std::make_shared<Framework::Camera>();
@@ -46,23 +42,34 @@ void AirportScene::Initialise()
     auto cockpitCamera = std::make_shared<CockpitCamera>(aircraft);
     auto topDownCamera = std::make_shared<TopDownCamera>(aircraft);
 
-    auto airportBaseFlatten = std::make_shared<Framework::TexturedWavefrontObject>(R"(Resources\airport-base-flatten.obj)", m_environment->GetTextureManager());
-    auto runway = std::make_shared<GroundPolygon>(R"(Resources\runway.obj)", m_environment->GetTextureManager());
+    auto airportBaseFlatten = std::make_shared<GroundPolygon>(R"(Resources\airport-base-flatten.obj)", R"(Resources\orthoimagery.dds)", m_environment->GetTextureManager());
+    auto groundpolyBase = std::make_shared<GroundPolygon>(R"(Resources\groundpoly-base.obj)", R"(Resources\asphalt.png)", m_environment->GetTextureManager());
+    auto groundpolyColour = std::make_shared<GroundPolygon>(R"(Resources\groundpoly-colour.obj)", R"(Resources\groundpoly-colour.dds)", m_environment->GetTextureManager());
+    auto groundpolyDetails1 = std::make_shared<GroundPolygon>(R"(Resources\groundpoly-details-1.obj)", R"(Resources\markings.dds)", m_environment->GetTextureManager());
 
-
-    m_objects.push_back(skybox);
-    m_objects.push_back(terrain);
-    m_objects.push_back(airportBase);
-    m_objects.push_back(buildings);
+    // General 3D Objects
+    m_objects.push_back(std::make_shared<SkyBox>(m_environment->GetTextureManager()));
+    m_objects.push_back(std::make_shared<Terrain>(m_environment->GetTextureManager()));
+    m_objects.push_back(std::make_shared<THangar>(vec3(31.277f, 0.0f, 121.099f), -14.0f, m_environment->GetTextureManager()));
+    m_objects.push_back(std::make_shared<THangar>(vec3(27.773f, 0.0f, 135.265f), -14.0f, m_environment->GetTextureManager()));
+    m_objects.push_back(std::make_shared<THangar>(vec3(18.667f, 0.0f, 110.459f), 166.0f, m_environment->GetTextureManager()));
+    m_objects.push_back(std::make_shared<THangar>(vec3(15.191f, 0.0f, 124.403f), 166.0f, m_environment->GetTextureManager()));
+    m_objects.push_back(std::make_shared<THangar>(vec3(11.694f, 0.0f, 138.426f), 166.0f, m_environment->GetTextureManager()));
     m_objects.push_back(aircraft);
 
+    // Cameras
     m_cameras.insert(std::make_pair(CameraType::Roaming, roamingCamera));
     m_cameras.insert(std::make_pair(CameraType::Orbit, orbitCamera));
     m_cameras.insert(std::make_pair(CameraType::Cockpit, cockpitCamera));
     m_cameras.insert(std::make_pair(CameraType::TopDown, topDownCamera));
 
+    // Ground polygons (Rendered in order, last inserted element appears on top)
     m_groundPolygons.push_back(airportBaseFlatten);
-    m_groundPolygons.push_back(runway);
+    m_groundPolygons.push_back(groundpolyBase);
+    m_groundPolygons.push_back(groundpolyDetails1);
+    m_groundPolygons.push_back(groundpolyColour);
+
+    m_camera = roamingCamera;
 }
 
 //-----------------------------------------------------------------------------

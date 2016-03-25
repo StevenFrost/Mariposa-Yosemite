@@ -25,6 +25,7 @@
     <ClCompile Include="..\Source\Aircraft.cpp" />
     <ClCompile Include="..\Source\AirportScene.cpp" />
     <ClCompile Include="..\Source\Application.cpp" />
+    <ClCompile Include="..\Source\Hangar.cpp" />
     <ClCompile Include="..\Source\CockpitCamera.cpp" />
     <ClCompile Include="..\Source\Environment.cpp" />
     <ClCompile Include="..\Source\GroundPolygon.cpp" />
@@ -40,6 +41,7 @@
     <ClInclude Include="..\Source\Aircraft.h" />
     <ClInclude Include="..\Source\AirportScene.h" />
     <ClInclude Include="..\Source\Application.h" />
+    <ClInclude Include="..\Source\Hangar.h" />
     <ClInclude Include="..\Source\CockpitCamera.h" />
     <ClInclude Include="..\Source\Environment.h" />
     <ClInclude Include="..\Source\GroundPolygon.h" />

@@ -15,6 +15,7 @@
 #include <Framework/WavefrontObject.h>
 
 #include "Environment.h"
+#include "GroundPolygon.h"
 
 namespace Application
 {
@@ -52,7 +53,7 @@ private:
 private:
     Environment::Ptr m_environment;
 
-    std::vector<Framework::WavefrontObject::Ptr> m_groundPolygons;
+    std::vector<GroundPolygon::Ptr>              m_groundPolygons;
     std::map<CameraType, Framework::Camera::Ptr> m_cameras;
 };
 

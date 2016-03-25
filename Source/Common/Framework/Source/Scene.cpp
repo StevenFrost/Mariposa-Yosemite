@@ -10,8 +10,6 @@
 
 #include <memory>
 
-#include <Framework/Animation.h>
-#include <Framework/AnimatedWavefrontObject.h>
 #include <GL/freeglut.h>
 
 namespace Framework
@@ -52,17 +50,7 @@ void Scene::Update(uint32_t frameTimeDelta)
 {
     for (auto& object : m_objects)
     {
-        auto animation = std::dynamic_pointer_cast<Animation>(object);
-        if (animation != nullptr)
-        {
-            animation->Update(frameTimeDelta);
-        }
-
-        auto animation2 = std::dynamic_pointer_cast<AnimatedWavefrontObject>(object);
-        if (animation2 != nullptr)
-        {
-            animation2->Update(frameTimeDelta);
-        }
+        object->Update(frameTimeDelta);
     }
 
     m_camera->Update(frameTimeDelta);

@@ -10,10 +10,8 @@
 #include <deque>
 #include <memory>
 
-#include <Framework/Animation.h>
-#include <Framework/AnimatedWavefrontObject.h>
 #include <Framework/Camera.h>
-#include <Framework/DisplayableObject.h>
+#include <Framework/WavefrontObject.h>
 
 namespace Application
 {
@@ -71,13 +69,13 @@ struct AircraftState
 
 //-----------------------------------------------------------------------------
 
-class Prop : public Framework::AnimatedWavefrontObject
+class Prop : public Framework::WavefrontObject
 {
 public:
     typedef std::shared_ptr<Prop> Ptr;
 
     Prop() :
-        AnimatedWavefrontObject(R"(Resources\j3-prop.obj)", nullptr)
+        WavefrontObject(R"(Resources\j3-prop.obj)")
     {}
     virtual ~Prop() {}
 
@@ -88,7 +86,7 @@ public:
             glRotatef(m_rotation.z, 0.0f, 0.0f, 1.0f);
             glTranslatef(-0.012f, -1.352f, 1.399f);
 
-            AnimatedWavefrontObject::Draw();
+            WavefrontObject::Draw();
         glPopMatrix();
     }
     virtual void Update(uint32_t frameTimeDelta)
@@ -99,13 +97,13 @@ public:
 
 //-----------------------------------------------------------------------------
 
-class ControlSurface : public Framework::AnimatedWavefrontObject
+class ControlSurface : public Framework::WavefrontObject
 {
 public:
     typedef std::shared_ptr<ControlSurface> Ptr;
 
     ControlSurface(std::string const& objFile, vec3 offset) :
-        AnimatedWavefrontObject(objFile, nullptr),
+        WavefrontObject(objFile),
         m_offset(offset)
     {}
     virtual ~ControlSurface() {}
@@ -119,7 +117,7 @@ public:
             glRotatef(m_rotation.z, 0.0f, 0.0f, 1.0f);
             glTranslatef(m_offset.x, m_offset.y, m_offset.z);
 
-            AnimatedWavefrontObject::Draw();
+            WavefrontObject::Draw();
         glPopMatrix();
     }
 
@@ -131,7 +129,7 @@ private:
 
 //-----------------------------------------------------------------------------
 
-class Aircraft : public Framework::AnimatedWavefrontObject
+class Aircraft : public Framework::WavefrontObject
 {
 public:
     typedef std::shared_ptr<Aircraft> Ptr;

@@ -12,10 +12,8 @@
 #include <iostream>
 #include <string>
 
+#include <Framework/WavefrontObject.h>
 #include <GL/freeglut.h>
-#include <GL/glut.h>
-#include <GL/GL.h>
-#include <GL/GLU.h>
 
 namespace Application
 {
@@ -38,10 +36,12 @@ vec3 CalculateTriangleNormal(vec3 const& a, vec3 const& b, vec3 const& c)
 Terrain::Terrain(Framework::TextureManager::Ptr const& textureManager) :
     m_tileWidth(m_right - m_left),
     m_tileHeight(m_bottom - m_top),
-    m_textureManager(textureManager)
+    m_textureManager(textureManager),
+    m_filler(nullptr)
 {
     LoadTerrainResources();
     BuildDisplayList();
+    LoadFillerMesh();
 }
 
 //-----------------------------------------------------------------------------
@@ -49,6 +49,12 @@ Terrain::Terrain(Framework::TextureManager::Ptr const& textureManager) :
 Terrain::~Terrain()
 {
     glDeleteLists(m_displayListHandle, 1);
+
+    for (uint16_t i = 0; i < m_tileHeight; ++i)
+    {
+        delete[] m_heightMap[i];
+    }
+    delete[] m_heightMap;
 }
 
 //-----------------------------------------------------------------------------
@@ -109,6 +115,7 @@ void Terrain::Draw()
 #endif // BRUTE_FORCE_TERRAIN
 
     glCallList(m_displayListHandle);
+    m_filler->Draw();
 }
 
 //-----------------------------------------------------------------------------
@@ -153,14 +160,22 @@ void Terrain::BuildHeightMapFromFile(std::string const& hgtFile)
 
 void Terrain::LoadTerrainResources()
 {
+    // Load 2D heightmap data from the SRTM file.
     m_heightMap = new uint16_t*[m_tileHeight];
     for (uint16_t i = 0; i < m_tileHeight; ++i)
     {
         m_heightMap[i] = new uint16_t[m_tileWidth];
     }
-
     BuildHeightMapFromFile(R"(Resources\N37W121.hgt)");
-    m_orthoTextureHandle = m_textureManager->GetTexture_SOIL(R"(Resources\ortho.jpg)");
+
+    // Load the orthoimagery
+    Framework::TextureLoadOptions options;
+    options.Linear          = true;
+    options.Repeat          = false;
+    options.GenerateMipMaps = true;
+    options.DirectLoadDDS   = false;
+
+    m_orthoTextureHandle = m_textureManager->GetTexture_SOIL(R"(Resources\orthoimagery.dds)", std::move(options));
 }
 
 //-----------------------------------------------------------------------------
@@ -276,6 +291,13 @@ void Terrain::BuildDisplayList()
         OutputDebugStringA(buf);
     }
 #endif // AIRPORT_BASE_EXPORT
+}
+
+//-----------------------------------------------------------------------------
+
+void Terrain::LoadFillerMesh()
+{
+    m_filler = std::make_shared<Framework::WavefrontObject>(R"(Resources\airport-base.obj)");
 }
 
 //-----------------------------------------------------------------------------

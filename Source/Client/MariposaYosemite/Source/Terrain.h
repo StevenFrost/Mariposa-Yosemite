@@ -34,6 +34,7 @@ private:
 
     void LoadTerrainResources();
     void BuildDisplayList();
+    void LoadFillerMesh();
 
 private:
     const uint16_t m_top    = 1696;
@@ -50,6 +51,7 @@ private:
     GLuint     m_orthoTextureHandle;
 
     GLuint m_displayListHandle;
+    DisplayableObject::Ptr m_filler;
 };
 
 //-----------------------------------------------------------------------------

@@ -111,9 +111,18 @@ void WavefrontMesh::SetData(std::vector<float> && data, uint32_t numVertices, Wa
 
 //-----------------------------------------------------------------------------
 
-WavefrontObject::WavefrontObject(std::string const& objFile, TextureManager::Ptr const& textureManager) :
-    m_textureManager(textureManager),
-    m_file(objFile)
+WavefrontObject::WavefrontObject(std::string const& objFile) :
+    m_file(objFile),
+    m_options(WavefrontLoadOptions{ false })
+{
+    Read_OBJ();
+}
+
+//-----------------------------------------------------------------------------
+
+WavefrontObject::WavefrontObject(std::string const & objFile, WavefrontLoadOptions const& options) :
+    m_file(objFile),
+    m_options(options)
 {
     Read_OBJ();
 }
@@ -174,15 +183,9 @@ void WavefrontObject::Read_OBJ()
         }
         else if (identifier == "v")
         {
-            if (mesh != nullptr)
+            if (!m_options.BatchMeshes && mesh != nullptr)
             {
-                mesh->SetData(
-                    std::move(buffer),
-                    numVertices,
-                    material,
-                    normals.size() != 0,
-                    textureCoordinates.size() != 0
-                );
+                mesh->SetData(std::move(buffer), numVertices, material, normals.size() != 0, textureCoordinates.size() != 0);
                 m_meshes.push_back(mesh);
 
                 // Clear out any left over state ready for the next mesh
@@ -270,13 +273,8 @@ void WavefrontObject::Read_OBJ()
     }
 
     stream.close();
-    mesh->SetData(
-        std::move(buffer),
-        numVertices,
-        material,
-        normals.size() != 0,
-        textureCoordinates.size() != 0
-    );
+
+    mesh->SetData(std::move(buffer), numVertices, material, normals.size() != 0, textureCoordinates.size() != 0);
     m_meshes.push_back(mesh);
 }
 
@@ -338,22 +336,6 @@ void WavefrontObject::Read_MTL(std::string const& fileName)
 
     m_materials.insert(std::make_pair(material->Name, material));
     stream.close();
-}
-
-//-----------------------------------------------------------------------------
-
-void TexturedWavefrontObject::Draw()
-{
-    glPushAttrib(GL_ALL_ATTRIB_BITS);
-    glPushMatrix();
-
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, m_textureHandle);
-
-    WavefrontObject::Draw();
-
-    glPopMatrix();
-    glPopAttrib();
 }
 
 //-----------------------------------------------------------------------------

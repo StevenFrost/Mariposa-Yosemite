@@ -27,7 +27,15 @@ TextureManager::~TextureManager(void)
 
 //-----------------------------------------------------------------------------
 
-GLuint TextureManager::GetTexture_BMP(std::string const& fileName, bool linear, bool repeat, bool generateMips)
+GLuint TextureManager::GetTexture_BMP(std::string const& fileName)
+{
+    TextureLoadOptions options{ true, true, true, true };
+    return GetTexture_BMP(fileName, std::move(options));
+}
+
+//-----------------------------------------------------------------------------
+
+GLuint TextureManager::GetTexture_BMP(std::string const& fileName, TextureLoadOptions const& options)
 {
     auto it = m_textures.find(fileName);
     if (it != m_textures.end())
@@ -93,12 +101,12 @@ GLuint TextureManager::GetTexture_BMP(std::string const& fileName, bool linear, 
     glGenTextures(1, &handle);
     glBindTexture(GL_TEXTURE_2D, handle);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, linear? GL_LINEAR : GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, generateMips ? (linear ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST) : (linear ? GL_LINEAR : GL_NEAREST));
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, repeat ? GL_REPEAT : GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, repeat ? GL_REPEAT : GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, options.Linear ? GL_LINEAR : GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, options.GenerateMipMaps ? (options.Linear ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST) : (options.Linear ? GL_LINEAR : GL_NEAREST));
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, options.Repeat ? GL_REPEAT : GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, options.Repeat ? GL_REPEAT : GL_CLAMP);
 
-    if (generateMips)
+    if (options.GenerateMipMaps)
     {
         gluBuild2DMipmaps(
             GL_TEXTURE_2D,
@@ -134,7 +142,14 @@ GLuint TextureManager::GetTexture_BMP(std::string const& fileName, bool linear, 
 
 //-----------------------------------------------------------------------------
 
-GLuint TextureManager::GetTexture_SOIL(std::string const& fileName, bool linear, bool repeat, bool generateMips)
+GLuint TextureManager::GetTexture_SOIL(std::string const& fileName)
+{
+    TextureLoadOptions options{ true, true, true, false };
+    return GetTexture_SOIL(fileName, std::move(options));
+}
+//-----------------------------------------------------------------------------
+
+GLuint TextureManager::GetTexture_SOIL(std::string const& fileName, TextureLoadOptions const& options)
 {
     auto it = m_textures.find(fileName);
     if (it != m_textures.end())
@@ -149,21 +164,25 @@ GLuint TextureManager::GetTexture_SOIL(std::string const& fileName, bool linear,
     glGenTextures(1, &handle);
     glBindTexture(GL_TEXTURE_2D, handle);
 
-    GLuint flags = SOIL_FLAG_INVERT_Y;
-    if (repeat)
+    GLuint flags = 0;
+    if (options.DirectLoadDDS)
+    {
+        flags |= SOIL_FLAG_DDS_LOAD_DIRECT;
+    }
+    if (options.Repeat)
     {
         flags |= SOIL_FLAG_TEXTURE_REPEATS;
     }
-    if (generateMips)
+    if (options.GenerateMipMaps)
     {
         flags |= SOIL_FLAG_MIPMAPS;
     }
 
-    handle = SOIL_load_OGL_texture(fileName.c_str(), SOIL_LOAD_RGB, handle, flags);
+    handle = SOIL_load_OGL_texture(fileName.c_str(), SOIL_LOAD_AUTO, handle, flags);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, linear ? GL_LINEAR : GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, generateMips ? (linear ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST) : (linear ? GL_LINEAR : GL_NEAREST));
-
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, options.Linear ? GL_LINEAR : GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, options.GenerateMipMaps ? (options.Linear ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST) : (options.Linear ? GL_LINEAR : GL_NEAREST));
+    
     glDisable(GL_TEXTURE_2D);
 
     m_textures.insert(m_textures.end(), std::make_pair(fileName, handle));

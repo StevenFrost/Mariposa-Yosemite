@@ -24,6 +24,7 @@ public:
     virtual ~DisplayableObject() {}
 
     virtual void Draw() = 0;
+    virtual void Update(uint32_t frameTimeDelta) {}
 
     void SetPosition(vec3 const& position);
     void SetScale(float s);
