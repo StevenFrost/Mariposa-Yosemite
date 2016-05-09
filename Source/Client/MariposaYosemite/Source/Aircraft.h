@@ -11,6 +11,7 @@
 #include <memory>
 
 #include <Framework/Camera.h>
+#include <Framework/Light.h>
 #include <Framework/WavefrontObject.h>
 
 namespace Application
@@ -20,8 +21,14 @@ namespace Application
 
 enum class WaypointType
 {
+    Stationary,
+    RotationPoint,
+    Climb,
     StraightAndLevel,
-    Turn
+    Turn,
+    Descent,
+    LandingPoint,
+    End
 };
 
 //-----------------------------------------------------------------------------
@@ -31,29 +38,51 @@ struct AircraftState
     typedef std::shared_ptr<AircraftState> Ptr;
     
     AircraftState() :
-        Type(WaypointType::StraightAndLevel),
+        Type(WaypointType::End),
         Position(0.0, 0.0, 0.0),
         Orientation(0.0, 0.0, 0.0),
         TurnCenter(0.0, 0.0, 0.0),
-        Speed(0.0),
-        TimeStamp(0)
+        VerticalSpeed(0.0),
+        HorizontalSpeed(0.0),
+        Acceleration(0.0),
+        TimeStamp(0),
+        OneShot(false)
     {}
 
-    AircraftState(WaypointType type, dvec3 position, dvec3 orientation, double speed) :
+    AircraftState(WaypointType type, dvec3 position, dvec3 orientation, double speed, bool oneShot = false) :
         Type(type),
         Position(position),
         Orientation(orientation),
-        Speed(speed),
-        TimeStamp(0)
+        TurnCenter(0.0, 0.0, 0.0),
+        VerticalSpeed(0.0),
+        HorizontalSpeed(speed),
+        Acceleration(0.0),
+        TimeStamp(std::numeric_limits<uint32_t>::max()),
+        OneShot(oneShot)
     {}
 
-    AircraftState(WaypointType type, dvec3 position, dvec3 orientation, dvec3 turnCenter, double speed) :
+    AircraftState(WaypointType type, dvec3 position, dvec3 orientation, double speed, uint32_t timestamp, bool oneShot = false) :
+        Type(type),
+        Position(position),
+        Orientation(orientation),
+        TurnCenter(0.0, 0.0, 0.0),
+        VerticalSpeed(0.0),
+        HorizontalSpeed(speed),
+        Acceleration(0.0),
+        TimeStamp(timestamp),
+        OneShot(oneShot)
+    {}
+
+    AircraftState(WaypointType type, dvec3 position, dvec3 orientation, double speed, dvec3 turnCenter, bool oneShot = false) :
         Type(type),
         Position(position),
         Orientation(orientation),
         TurnCenter(turnCenter),
-        Speed(speed),
-        TimeStamp(0)
+        VerticalSpeed(0.0),
+        HorizontalSpeed(speed),
+        Acceleration(0.0),
+        TimeStamp(std::numeric_limits<uint32_t>::max()),
+        OneShot(oneShot)
     {}
 
     WaypointType Type;
@@ -63,8 +92,12 @@ struct AircraftState
 
     dvec3 TurnCenter;
 
-    double   Speed;     // m/s
-    uint32_t TimeStamp; // ms
+    double   VerticalSpeed;   // m/s
+    double   HorizontalSpeed; // m/s
+    double   Acceleration;    // m/s^2
+    uint32_t TimeStamp;       // ms
+
+    bool OneShot;             // True if the state should only be encountered once
 };
 
 //-----------------------------------------------------------------------------
@@ -142,8 +175,16 @@ public:
 
     dvec3 GetPosition() const { return m_actualState->Position; }
 
+    void SetLightsEnabled(bool enabled);
+    bool GetLightsEnabled() const { return m_lightsEnabled; }
+
 private:
+    void InitLights();
+    void InitAnimation();
     void NextWaypoint();
+
+    void UpdateAircraftState(uint32_t const& frameTimeDelta);
+    void UpdateAttachedObjects(uint32_t const& frameTimeDelta);
 
 private:
     uint32_t m_animationTime;
@@ -154,6 +195,9 @@ private:
     double m_turnAngle;
     double m_bankAngle;
 
+    bool m_lightsEnabled;
+    bool m_init;
+
     AircraftState::Ptr m_actualState;
 
     // Control surfaces
@@ -163,6 +207,13 @@ private:
     ControlSurface::Ptr m_rightAileron;
 
     Prop::Ptr m_prop;
+
+    // Lights
+    Framework::Light::Ptr       m_landingLight;
+    Framework::Light::Ptr       m_leftNav;
+    Framework::Light::Ptr       m_rightNav;
+    Framework::StrobeLight::Ptr m_leftStrobe;
+    Framework::StrobeLight::Ptr m_rightStrobe;
 };
 
 //-----------------------------------------------------------------------------

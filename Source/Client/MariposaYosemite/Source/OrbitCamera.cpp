@@ -29,8 +29,13 @@ void OrbitCamera::Look()
 
     auto aircraftPosition = m_aircraft->GetPosition();
     m_eyePosition.x = static_cast<float>(aircraftPosition.x + m_radius * cos(m_theta) * sin(m_phi));
-    m_eyePosition.z = static_cast<float>(aircraftPosition.z + m_radius * sin(m_phi) * sin(m_theta));
     m_eyePosition.y = static_cast<float>(aircraftPosition.y + m_radius * cos(m_phi));
+    m_eyePosition.z = static_cast<float>(aircraftPosition.z + m_radius * sin(m_phi) * sin(m_theta));
+
+    if (m_eyePosition.y < 0.2f)
+    {
+        m_eyePosition.y = 0.2f;
+    }
 
     gluLookAt(
         m_eyePosition.x, m_eyePosition.y, m_eyePosition.z,

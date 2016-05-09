@@ -14,13 +14,13 @@
 #include <Framework/WavefrontObject.h>
 #include <GL/freeglut.h>
 
-#include "Aircraft.h"
 #include "CockpitCamera.h"
 #include "Hangar.h"
 #include "OrbitCamera.h"
 #include "SkyBox.h"
 #include "Terrain.h"
 #include "TopDownCamera.h"
+#include "TrackingCamera.h"
 
 namespace Application
 {
@@ -36,12 +36,20 @@ AirportScene::AirportScene(Environment::Ptr const& environment) :
 
 void AirportScene::Initialise()
 {
-    auto aircraft = std::make_shared<Aircraft>();
+    auto sun = std::make_shared<Framework::Light>(GL_LIGHT0, false);
+    sun->SetPosition(vec3(-3000.0f, 3000.0f, -3000.0f));
+    sun->SetAttenuationLinear(0.05f);
+    //sun->SetAmbient(vec4(0.1f, 0.1f, 0.1f, 1.0f));
+    //sun->SetDiffuse(vec4(0.1f, 0.1f, 0.1f, 1.0f));
+    //sun->SetSpecular(vec4(0.1f, 0.1f, 0.1f, 0.1f));
+
+    m_aircraft = std::make_shared<Aircraft>();
 
     auto roamingCamera = std::make_shared<Framework::Camera>();
-    auto orbitCamera = std::make_shared<OrbitCamera>(aircraft);
-    auto cockpitCamera = std::make_shared<CockpitCamera>(aircraft);
-    auto topDownCamera = std::make_shared<TopDownCamera>(aircraft);
+    auto orbitCamera = std::make_shared<OrbitCamera>(m_aircraft);
+    auto cockpitCamera = std::make_shared<CockpitCamera>(m_aircraft);
+    auto topDownCamera = std::make_shared<TopDownCamera>(m_aircraft);
+    auto trackingCamera = std::make_shared<TrackingCamera>(m_aircraft);
 
     auto airportBaseFlatten = std::make_shared<GroundPolygon>(R"(Resources\airport-base-flatten.obj)", R"(Resources\orthoimagery.dds)", m_environment->GetTextureManager());
     auto groundpolyBase = std::make_shared<GroundPolygon>(R"(Resources\groundpoly-base.obj)", R"(Resources\asphalt.png)", m_environment->GetTextureManager());
@@ -51,7 +59,10 @@ void AirportScene::Initialise()
     // General 3D Objects
     m_objects.push_back(std::make_shared<SkyBox>(m_environment->GetTextureManager()));
     m_objects.push_back(std::make_shared<Terrain>(m_environment->GetTextureManager()));
-    m_objects.push_back(aircraft);
+    m_objects.push_back(m_aircraft);
+
+    // Lights
+    m_objects.push_back(sun);
 
     // User Controlled Objects
     m_selectableObjects.push_back(std::make_shared<THangar>(vec3(31.277f, 0.0f, 121.099f), -14.0f, m_environment->GetTextureManager()));
@@ -59,12 +70,19 @@ void AirportScene::Initialise()
     m_selectableObjects.push_back(std::make_shared<THangar>(vec3(18.667f, 0.0f, 110.459f), 166.0f, m_environment->GetTextureManager()));
     m_selectableObjects.push_back(std::make_shared<THangar>(vec3(15.191f, 0.0f, 124.403f), 166.0f, m_environment->GetTextureManager()));
     m_selectableObjects.push_back(std::make_shared<THangar>(vec3(11.694f, 0.0f, 138.426f), 166.0f, m_environment->GetTextureManager()));
+    m_selectableObjects.push_back(std::make_shared<THangar>(vec3(-5.174f, 0.0f, 99.344f), -14.0f, m_environment->GetTextureManager()));
+    m_selectableObjects.push_back(std::make_shared<THangar>(vec3(-17.717f, 0.0f, 89.07f), 166.0f, m_environment->GetTextureManager()));
+    m_selectableObjects.push_back(std::make_shared<THangar>(vec3(-21.127f, 0.0f, 102.746f), 166.0f, m_environment->GetTextureManager()));
+    m_selectableObjects.push_back(std::make_shared<THangar>(vec3(-32.506f, 0.0f, 128.012f), 166.0f, m_environment->GetTextureManager()));
+    m_selectableObjects.push_back(std::make_shared<THangar>(vec3(-53.637f, 0.0f, 124.161f), -14.0f, m_environment->GetTextureManager()));
+    m_selectableObjects.push_back(std::make_shared<THangar>(vec3(-47.405f, 0.0f, 99.517f), -14.0f, m_environment->GetTextureManager()));
 
     // Cameras
     m_cameras.insert(std::make_pair(CameraType::Roaming, roamingCamera));
     m_cameras.insert(std::make_pair(CameraType::Orbit, orbitCamera));
     m_cameras.insert(std::make_pair(CameraType::Cockpit, cockpitCamera));
     m_cameras.insert(std::make_pair(CameraType::TopDown, topDownCamera));
+    m_cameras.insert(std::make_pair(CameraType::Tracking, trackingCamera));
 
     // Ground polygons (Rendered in order, last inserted element appears on top)
     m_groundPolygons.push_back(airportBaseFlatten);
@@ -73,6 +91,7 @@ void AirportScene::Initialise()
     m_groundPolygons.push_back(groundpolyColour);
 
     m_camera = roamingCamera;
+    AttachProjectionListener();
 }
 
 //-----------------------------------------------------------------------------
@@ -157,6 +176,16 @@ void AirportScene::KeyAction(unsigned char key, bool keyDown, int x, int y)
             m_camera = m_cameras.find(CameraType::TopDown)->second;
             AttachProjectionListener();
             Reshape(m_width, m_height);
+            break;
+        case '5':
+            m_camera->OnProjectionChanged = nullptr;
+            m_camera = m_cameras.find(CameraType::Tracking)->second;
+            AttachProjectionListener();
+            Reshape(m_width, m_height);
+            break;
+        case 'L':
+        case 'l':
+            m_aircraft->SetLightsEnabled(!m_aircraft->GetLightsEnabled());
             break;
         }
     }

@@ -36,6 +36,7 @@
     <ClCompile Include="..\Source\SkyBox.cpp" />
     <ClCompile Include="..\Source\Terrain.cpp" />
     <ClCompile Include="..\Source\TopDownCamera.cpp" />
+    <ClCompile Include="..\Source\TrackingCamera.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Aircraft.h" />
@@ -51,6 +52,7 @@
     <ClInclude Include="..\Source\SkyBox.h" />
     <ClInclude Include="..\Source\Terrain.h" />
     <ClInclude Include="..\Source\TopDownCamera.h" />
+    <ClInclude Include="..\Source\TrackingCamera.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 </Project>

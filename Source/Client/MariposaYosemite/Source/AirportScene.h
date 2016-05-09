@@ -14,6 +14,7 @@
 #include <Framework/Scene.h>
 #include <Framework/WavefrontObject.h>
 
+#include "Aircraft.h"
 #include "Environment.h"
 #include "GroundPolygon.h"
 
@@ -27,7 +28,8 @@ enum class CameraType
     Roaming,
     Orbit,
     Cockpit,
-    TopDown
+    TopDown,
+    Tracking
 };
 
 //-----------------------------------------------------------------------------
@@ -59,6 +61,8 @@ private:
 
     std::vector<GroundPolygon::Ptr>              m_groundPolygons;
     std::map<CameraType, Framework::Camera::Ptr> m_cameras;
+
+    Aircraft::Ptr m_aircraft;
 
     std::vector<Framework::UserControlledDisplayableObject::Ptr> m_selectableObjects;
     Framework::UserControlledDisplayableObject::Ptr              m_selectedObject;
