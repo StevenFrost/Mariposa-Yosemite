@@ -50,6 +50,12 @@
     <ClCompile Include="..\Source\TrackingCamera.cpp">
       <Filter>Cameras</Filter>
     </ClCompile>
+    <ClCompile Include="..\Source\Windsock.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\RoamingCamera.cpp">
+      <Filter>Cameras</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Source\Terrain.h">
@@ -88,6 +94,12 @@
       <Filter>Objects</Filter>
     </ClInclude>
     <ClInclude Include="..\Source\TrackingCamera.h">
+      <Filter>Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Windsock.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\RoamingCamera.h">
       <Filter>Cameras</Filter>
     </ClInclude>
   </ItemGroup>

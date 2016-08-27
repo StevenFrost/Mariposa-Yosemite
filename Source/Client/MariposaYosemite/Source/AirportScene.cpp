@@ -17,10 +17,12 @@
 #include "CockpitCamera.h"
 #include "Hangar.h"
 #include "OrbitCamera.h"
+#include "RoamingCamera.h"
 #include "SkyBox.h"
 #include "Terrain.h"
 #include "TopDownCamera.h"
 #include "TrackingCamera.h"
+#include "Windsock.h"
 
 namespace Application
 {
@@ -39,13 +41,13 @@ void AirportScene::Initialise()
     auto sun = std::make_shared<Framework::Light>(GL_LIGHT0, false);
     sun->SetPosition(vec3(-3000.0f, 3000.0f, -3000.0f));
     sun->SetAttenuationLinear(0.05f);
-    //sun->SetAmbient(vec4(0.1f, 0.1f, 0.1f, 1.0f));
-    //sun->SetDiffuse(vec4(0.1f, 0.1f, 0.1f, 1.0f));
-    //sun->SetSpecular(vec4(0.1f, 0.1f, 0.1f, 0.1f));
 
     m_aircraft = std::make_shared<Aircraft>();
+    
+    auto windsock = std::make_shared<Windsock>();
+    windsock->SetPosition(vec3(-81.456f, 6.43f, -87.475f));
 
-    auto roamingCamera = std::make_shared<Framework::Camera>();
+    auto roamingCamera = std::make_shared<RoamingCamera>();
     auto orbitCamera = std::make_shared<OrbitCamera>(m_aircraft);
     auto cockpitCamera = std::make_shared<CockpitCamera>(m_aircraft);
     auto topDownCamera = std::make_shared<TopDownCamera>(m_aircraft);
@@ -60,6 +62,7 @@ void AirportScene::Initialise()
     m_objects.push_back(std::make_shared<SkyBox>(m_environment->GetTextureManager()));
     m_objects.push_back(std::make_shared<Terrain>(m_environment->GetTextureManager()));
     m_objects.push_back(m_aircraft);
+    m_objects.push_back(windsock);
 
     // Lights
     m_objects.push_back(sun);
@@ -116,7 +119,7 @@ void AirportScene::Draw()
     for (size_t i = 0; i < m_selectableObjects.size(); ++i)
     {
         auto& object = m_selectableObjects.at(i);
-        glLoadName(i + 1);
+        glLoadName(static_cast<GLuint>(i + 1));
         object->Draw();
     }
 
