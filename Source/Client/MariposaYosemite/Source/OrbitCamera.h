@@ -6,29 +6,35 @@
 
 #pragma once
 
-#include <memory>
-#include <string>
+#include <Framework/Camera.h>
 
-#include <Framework/WavefrontObject.h>
+#include "Aircraft.h"
 
 namespace Application
 {
 
 //-----------------------------------------------------------------------------
 
-class GroundPolygon : public Framework::WavefrontObject
+class OrbitCamera : public Framework::Camera
 {
 public:
-    typedef std::shared_ptr<GroundPolygon> Ptr;
+    OrbitCamera(Aircraft::Ptr const& aircraft);
+    virtual ~OrbitCamera() {}
 
-    GroundPolygon(std::string const& objFile, std::string const& textureFile, Framework::TextureManager::Ptr const& textureManager);
-    virtual ~GroundPolygon() {}
-    
-    virtual void Draw();
+    virtual void Look();
+    virtual void Update(uint32_t frameTimeDelta) {}
+
+public: // Callbacks
+    virtual void MouseAction(int button, bool mouseDown, int x, int y);
+    virtual void MouseMotion(int x, int y);
 
 private:
-    GLuint m_textureHandle;
-    bool   m_lit;
+    Aircraft::Ptr m_aircraft;
+
+    double m_theta;
+    double m_phi;
+
+    double m_radius;
 };
 
 //-----------------------------------------------------------------------------

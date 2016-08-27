@@ -12,10 +12,8 @@
 #include <iostream>
 #include <string>
 
+#include <Framework/WavefrontObject.h>
 #include <GL/freeglut.h>
-#include <GL/glut.h>
-#include <GL/GL.h>
-#include <GL/GLU.h>
 
 namespace Application
 {
@@ -38,10 +36,12 @@ vec3 CalculateTriangleNormal(vec3 const& a, vec3 const& b, vec3 const& c)
 Terrain::Terrain(Framework::TextureManager::Ptr const& textureManager) :
     m_tileWidth(m_right - m_left),
     m_tileHeight(m_bottom - m_top),
-    m_textureManager(textureManager)
+    m_textureManager(textureManager),
+    m_filler(nullptr)
 {
     LoadTerrainResources();
     BuildDisplayList();
+    LoadFillerMesh();
 }
 
 //-----------------------------------------------------------------------------
@@ -49,6 +49,12 @@ Terrain::Terrain(Framework::TextureManager::Ptr const& textureManager) :
 Terrain::~Terrain()
 {
     glDeleteLists(m_displayListHandle, 1);
+
+    for (uint16_t i = 0; i < m_tileHeight; ++i)
+    {
+        delete[] m_heightMap[i];
+    }
+    delete[] m_heightMap;
 }
 
 //-----------------------------------------------------------------------------
@@ -109,6 +115,7 @@ void Terrain::Draw()
 #endif // BRUTE_FORCE_TERRAIN
 
     glCallList(m_displayListHandle);
+    m_filler->Draw();
 }
 
 //-----------------------------------------------------------------------------
@@ -153,14 +160,22 @@ void Terrain::BuildHeightMapFromFile(std::string const& hgtFile)
 
 void Terrain::LoadTerrainResources()
 {
+    // Load 2D heightmap data from the SRTM file.
     m_heightMap = new uint16_t*[m_tileHeight];
     for (uint16_t i = 0; i < m_tileHeight; ++i)
     {
         m_heightMap[i] = new uint16_t[m_tileWidth];
     }
-
     BuildHeightMapFromFile(R"(Resources\N37W121.hgt)");
-    m_orthoTextureHandle = m_textureManager->GetTexture(R"(Resources\ortho.bmp)");
+
+    // Load the orthoimagery
+    Framework::TextureLoadOptions options;
+    options.Linear          = true;
+    options.Repeat          = false;
+    options.GenerateMipMaps = true;
+    options.DirectLoadDDS   = false;
+
+    m_orthoTextureHandle = m_textureManager->GetTexture_SOIL(R"(Resources\orthoimagery.dds)", std::move(options));
 }
 
 //-----------------------------------------------------------------------------
@@ -188,41 +203,43 @@ void Terrain::BuildDisplayList()
     {
         for (uint16_t j = 0; j < m_tileWidth - 1; ++j)
         {
+            if (i > 138 && i < 152 && j >= 120 && j < 170) continue;
+
             // Triangle 1
             {
-                vec3 a(j - halfHeight, GetCorrectedHeightAt(i, j) * scale, i - halfWidth);
-                vec3 b(j - halfWidth, GetCorrectedHeightAt(i + 1, j) * scale, (i + 1) - halfHeight);
-                vec3 c((j + 1) - halfWidth, GetCorrectedHeightAt(i, j + 1) * scale, i - halfHeight);
+                vec3 a(j - halfHeight, m_heightMap[i][j] * scale, i - halfWidth);
+                vec3 b(j - halfWidth, m_heightMap[i + 1][j] * scale, (i + 1) - halfHeight);
+                vec3 c((j + 1) - halfWidth, m_heightMap[i][j + 1] * scale, i - halfHeight);
                 
                 vec3 n = CalculateTriangleNormal(a, b, c);
                 glNormal3f(n.x, n.y, n.z);
 
-                glTexCoord2f(i * texCoordCellWidth, j * texCoordCellWidth);
+                glTexCoord2f(j * texCoordCellWidth, 1.0f - (i * texCoordCellWidth));
                 glVertex3f(a.x, a.y, a.z);
 
-                glTexCoord2f((i + 1) * texCoordCellWidth, j * texCoordCellWidth);
+                glTexCoord2f(j * texCoordCellWidth, 1.0f - ((i + 1) * texCoordCellWidth));
                 glVertex3f(b.x, b.y, b.z);
 
-                glTexCoord2f(i * texCoordCellWidth, (j + 1) * texCoordCellWidth);
+                glTexCoord2f((j + 1) * texCoordCellWidth, 1.0f - (i * texCoordCellWidth));
                 glVertex3f(c.x, c.y, c.z);
             }
 
             // Triangle 2
             {
-                vec3 a(j - halfWidth, GetCorrectedHeightAt(i + 1, j) * scale, (i + 1) - halfHeight);
-                vec3 b((j + 1) - halfWidth, GetCorrectedHeightAt(i + 1, j + 1) * scale, (i + 1) - halfHeight);
-                vec3 c((j + 1) - halfWidth, GetCorrectedHeightAt(i, j + 1) * scale, i - halfHeight);
+                vec3 a(j - halfWidth, m_heightMap[i + 1][j] * scale, (i + 1) - halfHeight);
+                vec3 b((j + 1) - halfWidth, m_heightMap[i + 1][j + 1] * scale, (i + 1) - halfHeight);
+                vec3 c((j + 1) - halfWidth, m_heightMap[i][j + 1] * scale, i - halfHeight);
 
                 vec3 n = CalculateTriangleNormal(a, b, c);
                 glNormal3f(n.x, n.y, n.z);
 
-                glTexCoord2f((i + 1) * texCoordCellWidth, j * texCoordCellWidth);
+                glTexCoord2f(j * texCoordCellWidth, 1.0f - ((i + 1) * texCoordCellWidth));
                 glVertex3f(a.x, a.y, a.z);
 
-                glTexCoord2f((i + 1) * texCoordCellWidth, (j + 1) * texCoordCellWidth);
+                glTexCoord2f((j + 1) * texCoordCellWidth, 1.0f - ((i + 1) * texCoordCellWidth));
                 glVertex3f(b.x, b.y, b.z);
 
-                glTexCoord2f(i * texCoordCellWidth, (j + 1) * texCoordCellWidth);
+                glTexCoord2f((j + 1) * texCoordCellWidth, 1.0f - (i * texCoordCellWidth));
                 glVertex3f(c.x, c.y, c.z);
             }
         }
@@ -230,17 +247,57 @@ void Terrain::BuildDisplayList()
     glEnd();
     glPopMatrix();
     glEndList();
+
+#ifdef AIRPORT_BASE_EXPORT
+    float tScale = 30.0f;
+    uint32_t count = 0;
+    char buf[256];
+    for (uint16_t i = 139; i < 152; ++i)
+    {
+        for (uint16_t j = 120; j < 170; ++j)
+        {
+            sprintf_s(buf, "v %f %f %f\r\n",
+                (j - halfWidth) * tScale,
+                (m_heightMap[i][j] - 680.0f),
+                (i - halfHeight) * tScale
+            );
+            OutputDebugStringA(buf);
+            sprintf_s(buf, "v %f %f %f\r\n",
+                (j - halfWidth) * tScale,
+                (m_heightMap[i + 1][j] - 680.0f),
+                ((i + 1) - halfHeight) * tScale
+            );
+            OutputDebugStringA(buf);
+            sprintf_s(buf, "v %f %f %f\r\n",
+                ((j + 1) - halfWidth) * tScale,
+                (m_heightMap[i + 1][j + 1] - 680.0f),
+                ((i + 1) - halfHeight) * tScale
+            );
+            OutputDebugStringA(buf);
+            sprintf_s(buf, "v %f %f %f\r\n",
+                ((j + 1) - halfWidth) * tScale,
+                (m_heightMap[i][j + 1] - 680.0f),
+                (i - halfHeight) * tScale
+            );
+            OutputDebugStringA(buf);
+
+            count += 4;
+        }
+    }
+    OutputDebugStringA("\r\nvn 0.0000 -1.000 -0.000\r\n\r\n");
+    for (uint32_t i = 1; i <= count; i += 4)
+    {
+        sprintf_s(buf, "f %d//1 %d//1 %d//1 %d//1\r\n", i, i + 1, i + 2, i + 3);
+        OutputDebugStringA(buf);
+    }
+#endif // AIRPORT_BASE_EXPORT
 }
 
 //-----------------------------------------------------------------------------
 
-uint16_t Terrain::GetCorrectedHeightAt(uint16_t x, uint16_t y)
+void Terrain::LoadFillerMesh()
 {
-    if (x > 138 && x < 152 && y > 120 && y < 170)
-    {
-        return 680;
-    }
-    return m_heightMap[x][y];
+    m_filler = std::make_shared<Framework::WavefrontObject>(R"(Resources\airport-base.obj)");
 }
 
 //-----------------------------------------------------------------------------

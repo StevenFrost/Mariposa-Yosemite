@@ -31,7 +31,6 @@
     <ClCompile Include="..\Source\WavefrontObject.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Inc\Framework\Animation.h" />
     <ClInclude Include="..\Inc\Framework\Camera.h" />
     <ClInclude Include="..\Inc\Framework\Context.h" />
     <ClInclude Include="..\Inc\Framework\DisplayableObject.h" />

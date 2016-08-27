@@ -54,9 +54,6 @@
     <ClInclude Include="..\Inc\Framework\DisplayableObject.h">
       <Filter>Public Headers</Filter>
     </ClInclude>
-    <ClInclude Include="..\Inc\Framework\Animation.h">
-      <Filter>Public Headers</Filter>
-    </ClInclude>
     <ClInclude Include="..\Inc\Framework\Scene.h">
       <Filter>Public Headers</Filter>
     </ClInclude>

@@ -6,29 +6,26 @@
 
 #pragma once
 
-#include <memory>
-#include <string>
+#include <Framework/DisplayableObject.h>
+#include <Framework/TextureManager.h>
 
-#include <Framework/WavefrontObject.h>
+#include <GL/freeglut.h>
 
 namespace Application
 {
 
 //-----------------------------------------------------------------------------
 
-class GroundPolygon : public Framework::WavefrontObject
+class SkyBox : public Framework::DisplayableObject
 {
 public:
-    typedef std::shared_ptr<GroundPolygon> Ptr;
+    SkyBox(Framework::TextureManager::Ptr const& textureManager);
+    virtual ~SkyBox() {}
 
-    GroundPolygon(std::string const& objFile, std::string const& textureFile, Framework::TextureManager::Ptr const& textureManager);
-    virtual ~GroundPolygon() {}
-    
     virtual void Draw();
 
 private:
-    GLuint m_textureHandle;
-    bool   m_lit;
+    GLuint m_textureHandles[6];
 };
 
 //-----------------------------------------------------------------------------

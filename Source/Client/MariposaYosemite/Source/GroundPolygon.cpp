@@ -13,18 +13,35 @@ namespace Application
 
 //-----------------------------------------------------------------------------
 
-GroundPolygon::GroundPolygon(std::string const& objFile, Framework::TextureManager::Ptr const& textureManager) :
-    WavefrontObject(objFile, textureManager)
-{}
+Framework::WavefrontLoadOptions g_groundPolygonLoadOptions = { true };
+
+//-----------------------------------------------------------------------------
+
+GroundPolygon::GroundPolygon(std::string const& objFile, std::string const& textureFile, Framework::TextureManager::Ptr const& textureManager) :
+    WavefrontObject(objFile, g_groundPolygonLoadOptions),
+    m_textureHandle(0)
+{
+    Framework::TextureLoadOptions options;
+    options.Linear          = true;
+    options.Repeat          = true;
+    options.GenerateMipMaps = true;
+    options.DirectLoadDDS   = false;
+
+    m_textureHandle = textureManager->GetTexture_SOIL(textureFile, std::move(options));
+}
 
 //-----------------------------------------------------------------------------
 
 void GroundPolygon::Draw()
 {
-    glPushMatrix();
-    glTranslatef(0.0f, 0.1f, 0.0f);
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
+
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, m_textureHandle);
+
     WavefrontObject::Draw();
-    glPopMatrix();
+
+    glPopAttrib();
 }
 
 //-----------------------------------------------------------------------------

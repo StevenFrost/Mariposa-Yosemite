@@ -7,6 +7,7 @@
 #pragma once
 
 #include <cstdint>
+#include <functional>
 #include <memory>
 
 #include <Framework/Vector.h>
@@ -29,12 +30,17 @@ public:
     virtual void Look();
 
     virtual void Update(uint32_t frameTimeDelta);
+    virtual void Projection(int32_t width, int32_t height);
 
     vec3 GetEyePosition() const;
     vec3 GetViewDirection() const;
     vec3 GetForwardVector() const;
     vec3 GetRightVector() const;
     vec3 GetUpVector() const;
+
+    void SetEyePosition(vec3 position) { m_eyePosition = position; }
+
+    std::function<void()> OnProjectionChanged;
 
 public: // Callbacks
     virtual void KeyAction(unsigned char key, bool keyDown, int x, int y);

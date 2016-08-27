@@ -6,9 +6,7 @@
 
 #pragma once
 
-#include <memory>
-#include <string>
-
+#include <Framework/TextureManager.h>
 #include <Framework/WavefrontObject.h>
 
 namespace Application
@@ -16,19 +14,29 @@ namespace Application
 
 //-----------------------------------------------------------------------------
 
-class GroundPolygon : public Framework::WavefrontObject
+class THangar : public Framework::UserControlledDisplayableObject
 {
 public:
-    typedef std::shared_ptr<GroundPolygon> Ptr;
+    THangar(vec3 position, float angle, Framework::TextureManager::Ptr const& textureManager);
+    virtual ~THangar() {}
 
-    GroundPolygon(std::string const& objFile, std::string const& textureFile, Framework::TextureManager::Ptr const& textureManager);
-    virtual ~GroundPolygon() {}
-    
     virtual void Draw();
+    virtual void Update(uint32_t frameTimeDelta);
+
+public: // Callbacks
+    virtual void SpecialKeyAction(int key, bool keyDown, int x, int y);
 
 private:
     GLuint m_textureHandle;
-    bool   m_lit;
+
+    uint32_t m_animationTime;
+    float    m_doorAngle;
+
+    bool m_upKeyPressed;
+    bool m_downKeyPressed;
+
+    Framework::WavefrontObject::Ptr m_body;
+    Framework::WavefrontObject::Ptr m_doorSegment;
 };
 
 //-----------------------------------------------------------------------------

@@ -10,6 +10,9 @@
     <Filter Include="State">
       <UniqueIdentifier>{222f9344-63ec-4927-a685-f712ba58f432}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Cameras">
+      <UniqueIdentifier>{e5aef456-ad80-418b-bbe2-b2a386b829c6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Source\Terrain.cpp">
@@ -23,11 +26,35 @@
     </ClCompile>
     <ClCompile Include="..\Source\Application.cpp" />
     <ClCompile Include="..\Source\MariposaYosemitePch.cpp" />
-    <ClCompile Include="..\Source\Airport.cpp">
-      <Filter>Objects</Filter>
-    </ClCompile>
     <ClCompile Include="..\Source\GroundPolygon.cpp">
       <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Aircraft.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\OrbitCamera.cpp">
+      <Filter>Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\SkyBox.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\CockpitCamera.cpp">
+      <Filter>Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\TopDownCamera.cpp">
+      <Filter>Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Hangar.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\TrackingCamera.cpp">
+      <Filter>Cameras</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\Windsock.cpp">
+      <Filter>Objects</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Source\RoamingCamera.cpp">
+      <Filter>Cameras</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -45,11 +72,35 @@
     </ClInclude>
     <ClInclude Include="..\Source\Application.h" />
     <ClInclude Include="..\Source\MariposaYosemitePch.h" />
-    <ClInclude Include="..\Source\Airport.h">
-      <Filter>Objects</Filter>
-    </ClInclude>
     <ClInclude Include="..\Source\GroundPolygon.h">
       <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Aircraft.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\OrbitCamera.h">
+      <Filter>Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\SkyBox.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\CockpitCamera.h">
+      <Filter>Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\TopDownCamera.h">
+      <Filter>Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Hangar.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\TrackingCamera.h">
+      <Filter>Cameras</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\Windsock.h">
+      <Filter>Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Source\RoamingCamera.h">
+      <Filter>Cameras</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

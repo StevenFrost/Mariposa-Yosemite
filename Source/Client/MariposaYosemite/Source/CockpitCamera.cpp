@@ -4,32 +4,25 @@
 *                                                           *
 ************************************************************/
 
-#pragma once
+#include "MariposaYosemitePch.h"
 
-#include <memory>
-#include <string>
-
-#include <Framework/WavefrontObject.h>
+#include "CockpitCamera.h"
 
 namespace Application
 {
 
 //-----------------------------------------------------------------------------
 
-class GroundPolygon : public Framework::WavefrontObject
+CockpitCamera::CockpitCamera(Aircraft::Ptr const& aircraft) :
+    m_aircraft(aircraft)
+{}
+
+//-----------------------------------------------------------------------------
+
+void CockpitCamera::Update(uint32_t frameTimeDelta)
 {
-public:
-    typedef std::shared_ptr<GroundPolygon> Ptr;
-
-    GroundPolygon(std::string const& objFile, std::string const& textureFile, Framework::TextureManager::Ptr const& textureManager);
-    virtual ~GroundPolygon() {}
-    
-    virtual void Draw();
-
-private:
-    GLuint m_textureHandle;
-    bool   m_lit;
-};
+    m_eyePosition = m_aircraft->GetPosition() + dvec3(-0.25, 1.7, 0.0);
+}
 
 //-----------------------------------------------------------------------------
 

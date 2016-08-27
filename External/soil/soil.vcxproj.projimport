@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup>
+    <Import Condition="'$(SOILImported)' == 'true'" Project="Error attempting to import SOIL, imported twice." />
+  </ImportGroup>
+  <PropertyGroup Condition="'$(ProjectName)' != 'SOIL'">
+    <SOILImported>true</SOILImported>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>
+        $(ExternalDirectory)soil\include;
+        %(AdditionalIncludeDirectories)
+      </AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(ProjectName)' != 'SOIL'">
+    <Link>
+      <AdditionalDependencies>
+        $(ExternalDirectory)soil\lib\$(Platform)\$(Configuration)\SOIL.lib;
+        %(AdditionalDependencies)
+      </AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+</Project>

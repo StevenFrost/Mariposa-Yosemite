@@ -8,6 +8,7 @@
   </PropertyGroup>
   <ImportGroup Label="PropertySheets">
     <Import Condition="'$(FreeGLUTImported)'==''" Project="$(ExternalDirectory)freeglut3.0.0-2\freeglut.vcxproj.projimport" />
+    <Import Condition="'$(SOILImported)'==''" Project="$(ExternalDirectory)soil\soil.vcxproj.projimport" />
   </ImportGroup>
   <ItemDefinitionGroup>
     <ClCompile>

@@ -9,6 +9,7 @@
 #include <Framework/TextureManager.h>
 
 #include <iostream>
+#include <SOIL/SOIL.h>
 #include <Windows.h>
 
 namespace Framework
@@ -26,7 +27,15 @@ TextureManager::~TextureManager(void)
 
 //-----------------------------------------------------------------------------
 
-GLuint TextureManager::GetTexture(std::string const& fileName, bool generateMips)
+GLuint TextureManager::GetTexture_BMP(std::string const& fileName)
+{
+    TextureLoadOptions options{ true, true, true, true };
+    return GetTexture_BMP(fileName, std::move(options));
+}
+
+//-----------------------------------------------------------------------------
+
+GLuint TextureManager::GetTexture_BMP(std::string const& fileName, TextureLoadOptions const& options)
 {
     auto it = m_textures.find(fileName);
     if (it != m_textures.end())
@@ -92,12 +101,12 @@ GLuint TextureManager::GetTexture(std::string const& fileName, bool generateMips
     glGenTextures(1, &handle);
     glBindTexture(GL_TEXTURE_2D, handle);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, options.Linear ? GL_LINEAR : GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, options.GenerateMipMaps ? (options.Linear ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST) : (options.Linear ? GL_LINEAR : GL_NEAREST));
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, options.Repeat ? GL_REPEAT : GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, options.Repeat ? GL_REPEAT : GL_CLAMP);
 
-    if (generateMips)
+    if (options.GenerateMipMaps)
     {
         gluBuild2DMipmaps(
             GL_TEXTURE_2D,
@@ -126,6 +135,55 @@ GLuint TextureManager::GetTexture(std::string const& fileName, bool generateMips
 
     delete[] pixelBuffer;
     fclose(file);
+
+    m_textures.insert(m_textures.end(), std::make_pair(fileName, handle));
+    return handle;
+}
+
+//-----------------------------------------------------------------------------
+
+GLuint TextureManager::GetTexture_SOIL(std::string const& fileName)
+{
+    TextureLoadOptions options{ true, true, true, false };
+    return GetTexture_SOIL(fileName, std::move(options));
+}
+//-----------------------------------------------------------------------------
+
+GLuint TextureManager::GetTexture_SOIL(std::string const& fileName, TextureLoadOptions const& options)
+{
+    auto it = m_textures.find(fileName);
+    if (it != m_textures.end())
+    {
+        return it->second;
+    }
+
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+
+    GLuint handle;
+    glGenTextures(1, &handle);
+    glBindTexture(GL_TEXTURE_2D, handle);
+
+    GLuint flags = 0;
+    if (options.DirectLoadDDS)
+    {
+        flags |= SOIL_FLAG_DDS_LOAD_DIRECT;
+    }
+    if (options.Repeat)
+    {
+        flags |= SOIL_FLAG_TEXTURE_REPEATS;
+    }
+    if (options.GenerateMipMaps)
+    {
+        flags |= SOIL_FLAG_MIPMAPS;
+    }
+
+    handle = SOIL_load_OGL_texture(fileName.c_str(), SOIL_LOAD_AUTO, handle, flags);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, options.Linear ? GL_LINEAR : GL_NEAREST);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, options.GenerateMipMaps ? (options.Linear ? GL_LINEAR_MIPMAP_LINEAR : GL_NEAREST_MIPMAP_NEAREST) : (options.Linear ? GL_LINEAR : GL_NEAREST));
+    
+    glDisable(GL_TEXTURE_2D);
 
     m_textures.insert(m_textures.end(), std::make_pair(fileName, handle));
     return handle;

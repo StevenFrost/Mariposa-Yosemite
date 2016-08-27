@@ -6,25 +6,31 @@
 
 #pragma once
 
-#include <cstdint>
-#include <memory>
+#include <Framework/Camera.h>
 
-namespace Framework
+#include "Aircraft.h"
+
+namespace Application
 {
 
 //-----------------------------------------------------------------------------
 
-class Animation
+class CockpitCamera : public Framework::Camera
 {
 public:
-    typedef std::shared_ptr<Animation> Ptr;
+    CockpitCamera(Aircraft::Ptr const& aircraft);
+    virtual ~CockpitCamera() {}
 
-    Animation() {}
-    virtual ~Animation() {}
+    virtual void Update(uint32_t frameTimeDelta);
 
-    virtual void Update(uint32_t frameTimeDelta) = 0;
+public: // Callbacks
+    virtual void KeyAction(unsigned char key, bool keyDown, int x, int y) {}
+    virtual void SpecialKeyAction(int key, bool keyDown, int x, int y) {}
+
+private:
+    Aircraft::Ptr m_aircraft;
 };
 
 //-----------------------------------------------------------------------------
 
-} // namespace Framework
+} // namespace Application

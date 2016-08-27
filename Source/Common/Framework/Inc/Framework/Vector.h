@@ -42,6 +42,13 @@ struct Vector3
         x(x), y(y), z(z)
     {}
 
+    template <class S>
+    Vector3(Vector3<S> const& other) :
+        x(static_cast<T>(other.x)),
+        y(static_cast<T>(other.y)),
+        z(static_cast<T>(other.z))
+    {}
+
     void Normalize()
     {
         auto norm = GetNorm();
@@ -98,6 +105,14 @@ struct Vector4
 
     Vector4(T x, T y, T z, T w) :
         x(x), y(y), z(z), w(w)
+    {}
+
+    template <class S>
+    Vector4(Vector4<S> const& other) :
+        x(static_cast<T>(other.x)),
+        y(static_cast<T>(other.y)),
+        z(static_cast<T>(other.z)),
+        w(static_cast<T>(other.w))
     {}
 
     void Normalize()

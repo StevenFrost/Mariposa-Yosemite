@@ -53,8 +53,8 @@ void Camera::Look()
 
 void Camera::Update(uint32_t frameTimeDelta)
 {
-    float speed = 0.1f * (m_shiftDown ? 10.0f : 1.0f);
-    float delta = speed * frameTimeDelta;
+    float speed = 60.0f * (m_shiftDown ? 2.0f : 1.0f);
+    float delta = speed * (frameTimeDelta / 1000.0f);
 
     if (m_keys['a'])
     {
@@ -72,7 +72,13 @@ void Camera::Update(uint32_t frameTimeDelta)
     {
         m_eyePosition = m_eyePosition - (m_forward * delta);
     }
-    Look();
+}
+
+//-----------------------------------------------------------------------------
+
+void Camera::Projection(int32_t width, int32_t height)
+{
+    gluPerspective(60.0, static_cast<GLdouble>(width) / static_cast<GLdouble>(height), 0.1, 50000.0);
 }
 
 //-----------------------------------------------------------------------------
@@ -142,7 +148,10 @@ void Camera::SpecialKeyAction(int key, bool keyDown, int x, int y)
 
 void Camera::MouseAction(int button, bool mouseDown, int x, int y)
 {
-    m_mouseDown = mouseDown;
+    if (button == GLUT_LEFT_BUTTON)
+    {
+        m_mouseDown = mouseDown;
+    }
     m_mouseX = x;
     m_mouseY = y;
 }
