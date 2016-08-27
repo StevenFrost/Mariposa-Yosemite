@@ -1,7 +1,7 @@
 Mariposa-Yosemite
 =================
 
-Mariposa-Yosemite airport scene for the computer graphics module at the Univeristy of Nottingham.
+Mariposa-Yosemite airport scene for the computer graphics module at the Univeristy of Nottingham. Some assets are required to run the application, they can be downloaded from [OneDrive](https://1drv.ms/u/s!AkNem2BhW3E1gP4cmhzFhzkyryiTXA).
 
 Preview
 -------
